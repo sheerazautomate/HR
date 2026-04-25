@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff Statement Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+  <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet" />
+
+  <style>
+    /* ── Tokens ─────────────────────────────────────────────── */
+    :root {
+      --ink:       #0d1117;
+      --ink-soft:  #3a3f47;
+      --bg:        #f4f3ef;
+      --bg-card:   #ffffff;
+      --accent:    #c1440e;
+      --accent-lt: #f4ede8;
+      --teal:      #0e7490;
+      --teal-lt:   #e0f2f8;
+      --amber:     #b45309;
+      --amber-lt:  #fef3c7;
+      --green:     #166534;
+      --green-lt:  #dcfce7;
+      --border:    #e2ddd8;
+      --radius:    12px;
+      --shadow:    0 2px 16px rgba(0,0,0,.07);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,.12);
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    /* ── Base ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--ink); min-height: 100vh; }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    .site-header {
+      background: var(--ink);
+      padding: 18px 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .site-header .logo-mark {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--accent); display: grid; place-items: center;
+      font-family: var(--font-head); font-weight: 800; font-size: 18px; color: #fff;
+      flex-shrink: 0;
+    }
+    .site-header h1 {
+      font-family: var(--font-head); font-size: clamp(15px, 3vw, 20px);
+      font-weight: 700; color: #fff; letter-spacing: -.3px; line-height: 1.2;
+    }
+    .site-header h1 span { color: #aaa; font-weight: 400; font-size: .8em; display: block; }
+
+    /* ── Config Banner ──────────────────────────────────────── */
+    #configBanner {
+      background: linear-gradient(135deg, var(--accent) 0%, #a03008 100%);
+      color: #fff; padding: 14px 20px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    #configBanner input {
+      flex: 1; min-width: 240px; border: 0; border-radius: 8px;
+      padding: 8px 14px; font-size: 13px; font-family: monospace;
+      background: rgba(255,255,255,.15); color: #fff;
+    }
+    #configBanner input::placeholder { color: rgba(255,255,255,.6); }
+    #configBanner button {
+      background: #fff; color: var(--accent); border: 0;
+      padding: 8px 18px; border-radius: 8px; font-weight: 600; font-size: 13px;
+      cursor: pointer; white-space: nowrap; transition: opacity .2s;
+    }
+    #configBanner button:hover { opacity: .85; }
+    #configBanner.d-none { display: none !important; }
+
+    /* ── Main layout ─────────────────────────────────────────── */
+    .main-wrap { padding: 20px 16px 60px; max-width: 1400px; margin: 0 auto; }
+
+    /* ── Search card ─────────────────────────────────────────── */
+    .search-card {
+      background: var(--bg-card); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 22px 20px; margin-bottom: 20px;
+    }
+    .search-card h2 {
+      font-family: var(--font-head); font-size: 15px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; color: var(--ink-soft);
+      margin-bottom: 16px;
+    }
+    .form-label { font-size: 12px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .6px; color: var(--ink-soft); margin-bottom: 5px; }
+    .form-control, .form-select {
+      border: 1.5px solid var(--border); border-radius: 9px;
+      font-size: 14px; padding: 10px 14px; transition: border-color .2s, box-shadow .2s;
+      font-family: var(--font-body);
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(193,68,14,.12); outline: none;
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────── */
+    .btn-primary-custom {
+      background: var(--accent); color: #fff; border: 0; border-radius: 9px;
+      padding: 11px 24px; font-family: var(--font-head); font-weight: 700;
+      font-size: 14px; letter-spacing: .4px; cursor: pointer; width: 100%;
+      transition: background .2s, transform .1s;
+    }
+    .btn-primary-custom:hover  { background: #a83408; }
+    .btn-primary-custom:active { transform: scale(.98); }
+    .btn-primary-custom:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* ── Results card ────────────────────────────────────────── */
+    .results-card {
+      background: var(--bg-card); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 20px; overflow: hidden;
+      animation: fadeUp .3s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .results-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
+    }
+    .results-count {
+      font-family: var(--font-head); font-size: 14px; font-weight: 700;
+      background: var(--accent-lt); color: var(--accent);
+      padding: 4px 12px; border-radius: 20px;
+    }
+
+    /* ── DataTable overrides ─────────────────────────────────── */
+    table.dataTable thead th {
+      background: var(--ink); color: #fff; font-family: var(--font-head);
+      font-size: 12px; letter-spacing: .5px; text-transform: uppercase;
+      border: 0; padding: 12px 10px; white-space: nowrap;
+    }
+    table.dataTable tbody tr { border-bottom: 1px solid var(--border); }
+    table.dataTable tbody td { font-size: 13px; padding: 10px 10px; vertical-align: middle; }
+    table.dataTable tbody tr:hover { background: var(--accent-lt) !important; }
+    .dataTables_wrapper .dataTables_filter input { border: 1.5px solid var(--border); border-radius: 8px; padding: 6px 10px; }
+    .dataTables_wrapper .dataTables_length select { border: 1.5px solid var(--border); border-radius: 8px; }
+    div.dt-buttons { margin-bottom: 8px; }
+    .btn.buttons-excel { background: var(--green) !important; color: #fff !important;
+      border: 0 !important; border-radius: 8px !important; font-size: 12px !important;
+      font-weight: 600 !important; padding: 6px 14px !important; }
+
+    /* ── Action buttons in table ─────────────────────────────── */
+    .action-btn {
+      border: 0; border-radius: 7px; font-size: 11px; font-weight: 700;
+      padding: 5px 10px; cursor: pointer; font-family: var(--font-head);
+      letter-spacing: .3px; transition: opacity .15s, transform .1s; white-space: nowrap;
+    }
+    .action-btn:hover  { opacity: .85; }
+    .action-btn:active { transform: scale(.95); }
+    .btn-transfer  { background: var(--teal); color: #fff; }
+    .btn-retire    { background: var(--amber); color: #fff; }
+    .btn-resign    { background: var(--ink-soft); color: #fff; }
+
+    /* ── Modal ───────────────────────────────────────────────── */
+    .modal-content {
+      border: 0; border-radius: 16px; box-shadow: var(--shadow-lg);
+      font-family: var(--font-body);
+    }
+    .modal-header {
+      background: var(--ink); color: #fff; border-radius: 16px 16px 0 0;
+      padding: 18px 22px; border: 0;
+    }
+    .modal-title { font-family: var(--font-head); font-weight: 700; font-size: 16px; }
+    .btn-close { filter: invert(1); }
+    .modal-body { padding: 22px; }
+    .modal-footer { border: 0; padding: 0 22px 22px; gap: 10px; }
+
+    /* Teacher info chip */
+    .teacher-chip {
+      background: var(--accent-lt); border: 1.5px solid var(--accent);
+      border-radius: 10px; padding: 10px 14px; margin-bottom: 18px;
+    }
+    .teacher-chip .label { font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .6px; color: var(--accent); margin-bottom: 2px; }
+    .teacher-chip .name  { font-family: var(--font-head); font-size: 15px; font-weight: 700; }
+
+    /* Type pills */
+    .type-pill-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .type-pill {
+      border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 14px;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s;
+      background: transparent; font-family: var(--font-body);
+    }
+    .type-pill:hover { border-color: var(--accent); color: var(--accent); }
+    .type-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .type-pill.teal.active   { background: var(--teal); border-color: var(--teal); }
+    .type-pill.amber.active  { background: var(--amber); border-color: var(--amber); }
+    .type-pill.dark.active   { background: var(--ink-soft); border-color: var(--ink-soft); }
+
+    /* Verify row */
+    .verify-row { display: flex; gap: 8px; }
+    .verify-row .form-control { flex: 1; }
+    .btn-verify {
+      background: var(--teal); color: #fff; border: 0; border-radius: 9px;
+      padding: 10px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+      white-space: nowrap; transition: opacity .2s;
+    }
+    .btn-verify:hover    { opacity: .85; }
+    .btn-verify:disabled { background: #ccc; cursor: not-allowed; }
+
+    .verify-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      border-radius: 7px; padding: 7px 12px; font-size: 12px;
+      font-weight: 600; margin-top: 8px;
+    }
+    .verify-badge.ok  { background: var(--green-lt);  color: var(--green);  }
+    .verify-badge.err { background: #fee2e2; color: #b91c1c; }
+
+    /* Confirm btn */
+    .btn-confirm {
+      background: var(--accent); color: #fff; border: 0; border-radius: 9px;
+      padding: 11px 22px; font-family: var(--font-head); font-weight: 700;
+      font-size: 14px; cursor: pointer; transition: background .2s;
+    }
+    .btn-confirm:hover    { background: #a83408; }
+    .btn-confirm:disabled { background: #ccc; cursor: not-allowed; }
+    .btn-cancel {
+      background: transparent; color: var(--ink-soft);
+      border: 1.5px solid var(--border); border-radius: 9px;
+      padding: 10px 18px; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: border-color .2s;
+    }
+    .btn-cancel:hover { border-color: var(--ink); }
+
+    /* ── Spinner ─────────────────────────────────────────────── */
+    .spinner-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 40px;
+      font-family: var(--font-head); color: var(--ink-soft); gap: 12px;
+    }
+    .spinner {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 3px solid var(--border); border-top-color: var(--accent);
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Toast ───────────────────────────────────────────────── */
+    #toast-container {
+      position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .toast-msg {
+      padding: 12px 18px; border-radius: 10px; font-size: 14px; font-weight: 600;
+      color: #fff; box-shadow: var(--shadow-lg);
+      animation: toastIn .3s ease, toastOut .3s ease 3.7s forwards;
+      max-width: 320px; line-height: 1.4;
+    }
+    .toast-msg.success { background: var(--green); }
+    .toast-msg.error   { background: #dc2626; }
+    .toast-msg.info    { background: var(--teal); }
+    @keyframes toastIn  { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes toastOut { from { opacity:1; } to { opacity:0; transform: translateY(10px); } }
+
+    /* ── Responsive tweaks ───────────────────────────────────── */
+    @media (max-width: 576px) {
+      .site-header { padding: 14px 16px; }
+      .main-wrap   { padding: 14px 12px 60px; }
+      .search-card { padding: 16px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────── -->
+<header class="site-header">
+  <div class="logo-mark">S</div>
+  <h1>Staff Statement Dashboard <span>Punjab Education Department</span></h1>
+</header>
+
+<!-- ── Config banner (first-time setup) ────────────────────── -->
+<div id="configBanner">
+  <span style="font-size:13px;font-weight:600;white-space:nowrap;">⚙ GAS Web App URL</span>
+  <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/AKfycbzloDdFP1qYv0XDJJKrN0IjYsetgZ_kG51hwHDiPNuk9Mm5i8hCQ2uTlncOPdcCKAXm/exec" />
+  <button onclick="saveGasUrl()">Save & Connect</button>
+</div>
+
+<!-- ── Main ────────────────────────────────────────────────── -->
+<div class="main-wrap">
+
+  <!-- Search Card -->
+  <div class="search-card">
+    <h2>Search Staff</h2>
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-sm-6 col-md-3">
+        <label class="form-label">Search By</label>
+        <select id="searchType" class="form-select" onchange="toggleSearchInput()">
+          <option value="personalNo">Personal No.</option>
+          <option value="cnic">CNIC</option>
+          <option value="emis">School EMIS Code</option>
+          <option value="markaz">Markaz Name</option>
+        </select>
+      </div>
+      <div class="col-12 col-sm-6 col-md-7" id="inputContainer">
+        <label class="form-label">Enter Value</label>
+        <input type="text" id="searchValue" class="form-control" placeholder="e.g. 3054123" />
+        <select id="searchMarkaz" class="form-select d-none"></select>
+      </div>
+      <div class="col-12 col-md-2">
+        <button class="btn-primary-custom" id="searchBtn" onclick="performSearch()">Search</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results area -->
+  <div id="resultsArea"></div>
+</div>
+
+<!-- ── Action Modal ─────────────────────────────────────────── -->
+<div class="modal fade" id="actionModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Teacher Action</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Teacher chip -->
+        <div class="teacher-chip">
+          <div class="label">Selected Teacher</div>
+          <div class="name" id="modalTeacherName">—</div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;" id="modalTeacherPno"></div>
+        </div>
+
+        <!-- Action type selector -->
+        <label class="form-label">Action Type</label>
+        <div class="type-pill-group" id="actionTypePills">
+          <button class="type-pill active"       data-val="same"        onclick="selectActionType(this)">Within Tehsil</button>
+          <button class="type-pill teal"          data-val="oot"         onclick="selectActionType(this)">Out of Tehsil</button>
+          <button class="type-pill teal"          data-val="ood"         onclick="selectActionType(this)">Out of District</button>
+          <button class="type-pill amber"         data-val="retirement"  onclick="selectActionType(this)">Retirement</button>
+          <button class="type-pill dark"          data-val="resignation" onclick="selectActionType(this)">Resignation</button>
+        </div>
+
+        <!-- Transfer section (same / oot / ood) -->
+        <div id="transferSection">
+          <label class="form-label">New School EMIS Code</label>
+          <div class="verify-row">
+            <input type="text" id="newEmisInput" class="form-control" placeholder="e.g. 32110001" />
+            <button class="btn-verify" id="verifyBtn" onclick="verifySchool()">Verify</button>
+          </div>
+          <div id="verifyResult"></div>
+          <input type="hidden" id="verifiedMarkaz" />
+        </div>
+
+        <!-- Notification section (retirement / resignation) -->
+        <div id="notifSection" class="d-none">
+          <label class="form-label">Notification No.</label>
+          <input type="text" id="notifNoInput" class="form-control" placeholder="e.g. SO(E-I)3-10/2024" oninput="onNotifInput()" />
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn-confirm" id="confirmBtn" onclick="submitAction()" disabled>Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════════════════════════
+const GAS_URL_KEY = 'gasWebAppUrl';
+
+function getGasUrl() { return localStorage.getItem(GAS_URL_KEY) || ''; }
+
+function saveGasUrl() {
+  const url = document.getElementById('gasUrlInput').value.trim();
+  if (!url.startsWith('https://')) { showToast('Please enter a valid HTTPS URL.', 'error'); return; }
+  localStorage.setItem(GAS_URL_KEY, url);
+  document.getElementById('configBanner').classList.add('d-none');
+  showToast('Connected! Loading Markaz list…', 'info');
+  loadMarkazList();
+}
+
+// Hide banner if URL already saved
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = getGasUrl();
+  if (saved) {
+    document.getElementById('configBanner').classList.add('d-none');
+    loadMarkazList();
+  } else {
+    document.getElementById('gasUrlInput').value = '';
+  }
+});
+
+// ══════════════════════════════════════════════════════════════
+//  API HELPERS
+// ══════════════════════════════════════════════════════════════
+async function gasGet(params) {
+  const base = getGasUrl();
+  if (!base) { showToast('GAS URL not configured.', 'error'); return null; }
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${base}?${qs}`);
+  return res.json();
+}
+
+async function gasPost(payload) {
+  const base = getGasUrl();
+  if (!base) { showToast('GAS URL not configured.', 'error'); return null; }
+  const res = await fetch(base, {
+    method:  'POST',
+    headers: { 'Content-Type': 'text/plain' }, // GAS doPost needs text/plain for JSON body
+    body:    JSON.stringify(payload),
+    redirect: 'follow',
+  });
+  return res.json();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  MARKAZ LIST
+// ══════════════════════════════════════════════════════════════
+async function loadMarkazList() {
+  try {
+    const data = await gasGet({ action: 'getMarkazList' });
+    if (!data || !data.success) return;
+    const sel = document.getElementById('searchMarkaz');
+    sel.innerHTML = '';
+    data.data.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = opt.textContent = m;
+      sel.appendChild(opt);
+    });
+  } catch (e) { /* silent fail */ }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SEARCH
+// ══════════════════════════════════════════════════════════════
+function toggleSearchInput() {
+  const type = document.getElementById('searchType').value;
+  const hints = { personalNo: 'e.g. 3054123', cnic: 'e.g. 32301-1234567-1', emis: 'e.g. 32110001' };
+  if (type === 'markaz') {
+    document.getElementById('searchValue').classList.add('d-none');
+    document.getElementById('searchMarkaz').classList.remove('d-none');
+  } else {
+    document.getElementById('searchValue').classList.remove('d-none');
+    document.getElementById('searchMarkaz').classList.add('d-none');
+    document.getElementById('searchValue').placeholder = hints[type] || '';
+  }
+}
+
+async function performSearch() {
+  const type  = document.getElementById('searchType').value;
+  const value = type === 'markaz'
+    ? document.getElementById('searchMarkaz').value
+    : document.getElementById('searchValue').value.trim();
+
+  if (!value) { showToast('Please enter a search value.', 'error'); return; }
+
+  const btn = document.getElementById('searchBtn');
+  btn.textContent = 'Searching…';
+  btn.disabled = true;
+
+  document.getElementById('resultsArea').innerHTML = `
+    <div class="results-card">
+      <div class="spinner-wrap"><div class="spinner"></div><span>Loading staff data…</span></div>
+    </div>`;
+
+  try {
+    const data = await gasGet({ action: 'searchStaff', searchType: type, searchValue: value });
+    btn.textContent = 'Search';
+    btn.disabled = false;
+
+    if (!data || !data.success) {
+      showToast(data?.message || 'An error occurred.', 'error');
+      document.getElementById('resultsArea').innerHTML = '';
+      return;
+    }
+    if (!data.data || data.data.length === 0) {
+      showToast('No staff found matching your query.', 'info');
+      document.getElementById('resultsArea').innerHTML = '';
+      return;
+    }
+    renderTable(data.headers, data.data);
+  } catch (e) {
+    btn.textContent = 'Search';
+    btn.disabled = false;
+    showToast('Network error: ' + e.message, 'error');
+    document.getElementById('resultsArea').innerHTML = '';
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  TABLE RENDERING
+// ══════════════════════════════════════════════════════════════
+let dataTable;
+function renderTable(headers, rows) {
+  if ($.fn.DataTable.isDataTable('#resultsTable')) {
+    $('#resultsTable').DataTable().destroy();
+  }
+
+  let theadHtml = '<tr><th>Actions</th>';
+  headers.forEach(h => theadHtml += `<th>${escHtml(String(h))}</th>`);
+  theadHtml += '</tr>';
+
+  let tbodyHtml = '';
+  rows.forEach(row => {
+    const pNo  = escAttr(String(row[0]));
+    const name = escAttr(String(row[3] || 'Unknown'));
+    tbodyHtml += `<tr>
+      <td style="white-space:nowrap;">
+        <button class="action-btn btn-transfer" onclick="openActionModal('${pNo}','${name}','same')">Transfer</button>
+        <button class="action-btn btn-retire"   onclick="openActionModal('${pNo}','${name}','retirement')" style="margin-left:4px;">Retire</button>
+        <button class="action-btn btn-resign"   onclick="openActionModal('${pNo}','${name}','resignation')" style="margin-left:4px;">Resign</button>
+      </td>`;
+    row.forEach(cell => tbodyHtml += `<td>${escHtml(cell === null || cell === undefined ? '' : String(cell))}</td>`);
+    tbodyHtml += '</tr>';
+  });
+
+  document.getElementById('resultsArea').innerHTML = `
+    <div class="results-card">
+      <div class="results-meta">
+        <span class="results-count">${rows.length} record${rows.length !== 1 ? 's' : ''} found</span>
+        <span style="font-size:12px;color:var(--ink-soft);">Use buttons to transfer, retire, or resign a teacher</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table id="resultsTable" class="table table-striped table-hover align-middle" style="width:100%;white-space:nowrap;">
+          <thead id="tableHead">${theadHtml}</thead>
+          <tbody>${tbodyHtml}</tbody>
+        </table>
+      </div>
+    </div>`;
+
+  dataTable = $('#resultsTable').DataTable({
+    scrollX: true,
+    destroy: true,
+    dom: 'Bfrtip',
+    buttons: [
+      { extend: 'excelHtml5', className: 'btn buttons-excel', text: '⬇ Export Excel' },
+    ],
+    language: { search: 'Filter:', lengthMenu: 'Show _MENU_' },
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  ACTION MODAL
+// ══════════════════════════════════════════════════════════════
+let currentPno = '';
+
+function openActionModal(personalNo, teacherName, defaultType) {
+  currentPno = personalNo;
+  document.getElementById('modalTeacherName').textContent = decodeAttr(teacherName);
+  document.getElementById('modalTeacherPno').textContent  = 'Personal No: ' + personalNo;
+
+  // Reset
+  document.getElementById('newEmisInput').value  = '';
+  document.getElementById('notifNoInput').value  = '';
+  document.getElementById('verifyResult').innerHTML = '';
+  document.getElementById('verifiedMarkaz').value  = '';
+  document.getElementById('confirmBtn').disabled   = true;
+
+  // Set default type
+  document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+  const target = document.querySelector(`.type-pill[data-val="${defaultType}"]`);
+  if (target) target.classList.add('active');
+  applyActionType(defaultType);
+
+  new bootstrap.Modal(document.getElementById('actionModal')).show();
+}
+
+function selectActionType(pill) {
+  document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  // Reset state
+  document.getElementById('newEmisInput').value    = '';
+  document.getElementById('notifNoInput').value    = '';
+  document.getElementById('verifyResult').innerHTML = '';
+  document.getElementById('verifiedMarkaz').value   = '';
+  document.getElementById('confirmBtn').disabled    = true;
+  applyActionType(pill.dataset.val);
+}
+
+function applyActionType(type) {
+  const isTransfer = ['same', 'oot', 'ood'].includes(type);
+  const isAction   = ['retirement', 'resignation'].includes(type);
+  document.getElementById('transferSection').classList.toggle('d-none', !isTransfer);
+  document.getElementById('notifSection').classList.toggle('d-none', !isAction);
+
+  // For OOT/OOD: no verification needed, confirm immediately
+  if (type === 'oot' || type === 'ood') {
+    document.getElementById('confirmBtn').disabled = false;
+    // Hide the EMIS row for these types
+    document.getElementById('transferSection').classList.add('d-none');
+  }
+}
+
+function getActiveType() {
+  const active = document.querySelector('.type-pill.active');
+  return active ? active.dataset.val : 'same';
+}
+
+// ── EMIS Verification ─────────────────────────────────────────
+async function verifySchool() {
+  const emis = document.getElementById('newEmisInput').value.trim();
+  if (!emis) return;
+
+  const btn = document.getElementById('verifyBtn');
+  btn.textContent = '…';
+  btn.disabled = true;
+
+  document.getElementById('verifyResult').innerHTML = '';
+  document.getElementById('verifiedMarkaz').value   = '';
+  document.getElementById('confirmBtn').disabled    = true;
+
+  try {
+    const data = await gasGet({ action: 'getSchoolDetails', emis });
+    btn.textContent = 'Verify';
+    btn.disabled    = false;
+
+    if (data && data.found) {
+      document.getElementById('verifyResult').innerHTML = `
+        <div class="verify-badge ok">✓ ${escHtml(data.schoolName)} &nbsp;|&nbsp; ${escHtml(data.markaz)}</div>`;
+      document.getElementById('verifiedMarkaz').value = data.markaz;
+      document.getElementById('confirmBtn').disabled  = false;
+    } else {
+      document.getElementById('verifyResult').innerHTML =
+        `<div class="verify-badge err">✗ EMIS not found in Schools sheet</div>`;
+    }
+  } catch (e) {
+    btn.textContent = 'Verify';
+    btn.disabled    = false;
+    document.getElementById('verifyResult').innerHTML =
+      `<div class="verify-badge err">✗ Network error</div>`;
+  }
+}
+
+// ── Notification input live enable ────────────────────────────
+function onNotifInput() {
+  const val = document.getElementById('notifNoInput').value.trim();
+  document.getElementById('confirmBtn').disabled = !val;
+}
+
+// ── Submit Action ─────────────────────────────────────────────
+async function submitAction() {
+  const type = getActiveType();
+  const btn  = document.getElementById('confirmBtn');
+  btn.textContent = 'Processing…';
+  btn.disabled = true;
+
+  let payload;
+  if (type === 'same') {
+    payload = {
+      action: 'transfer', personalNo: currentPno, transferType: 'same',
+      newEmis:   document.getElementById('newEmisInput').value.trim(),
+      newMarkaz: document.getElementById('verifiedMarkaz').value,
+    };
+  } else if (type === 'oot' || type === 'ood') {
+    payload = { action: 'transfer', personalNo: currentPno, transferType: type, newEmis: '', newMarkaz: '' };
+  } else {
+    payload = {
+      action: 'retireOrResign', personalNo: currentPno, actionType: type,
+      notificationNo: document.getElementById('notifNoInput').value.trim(),
+    };
+  }
+
+  try {
+    const res = await gasPost(payload);
+    btn.textContent = 'Confirm';
+    bootstrap.Modal.getInstance(document.getElementById('actionModal')).hide();
+
+    if (res && res.success) {
+      showToast(res.message, 'success');
+      performSearch(); // refresh
+    } else {
+      showToast(res?.message || 'Something went wrong.', 'error');
+      btn.disabled = false;
+    }
+  } catch (e) {
+    btn.textContent = 'Confirm';
+    btn.disabled = false;
+    showToast('Network error: ' + e.message, 'error');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  UTILITIES
+// ══════════════════════════════════════════════════════════════
+function showToast(msg, type = 'info') {
+  const el = document.createElement('div');
+  el.className = `toast-msg ${type}`;
+  el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => el.remove(), 4200);
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(str) {
+  return str.replace(/'/g,'&#39;').replace(/"/g,'&quot;');
+}
+function decodeAttr(str) {
+  const t = document.createElement('textarea');
+  t.innerHTML = str.replace(/&#39;/g,"'");
+  return t.value;
+}
+</script>
+</body>
+</html>
