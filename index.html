@@ -275,13 +275,6 @@
   <h1>Staff Statement Dashboard <span>Punjab Education Department</span></h1>
 </header>
 
-<!-- ── Config banner (first-time setup) ────────────────────── -->
-<div id="configBanner">
-  <span style="font-size:13px;font-weight:600;white-space:nowrap;">⚙ GAS Web App URL</span>
-  <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/AKfycbzloDdFP1qYv0XDJJKrN0IjYsetgZ_kG51hwHDiPNuk9Mm5i8hCQ2uTlncOPdcCKAXm/exec" />
-  <button onclick="saveGasUrl()">Save & Connect</button>
-</div>
-
 <!-- ── Main ────────────────────────────────────────────────── -->
 <div class="main-wrap">
 
@@ -382,18 +375,10 @@
 // ══════════════════════════════════════════════════════════════
 //  CONFIG
 // ══════════════════════════════════════════════════════════════
-const GAS_URL_KEY = 'gasWebAppUrl';
+const GAS_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
 
-function getGasUrl() { return localStorage.getItem(GAS_URL_KEY) || ''; }
+function getGasUrl() { return GAS_URL; }
 
-function saveGasUrl() {
-  const url = document.getElementById('gasUrlInput').value.trim();
-  if (!url.startsWith('https://')) { showToast('Please enter a valid HTTPS URL.', 'error'); return; }
-  localStorage.setItem(GAS_URL_KEY, url);
-  document.getElementById('configBanner').classList.add('d-none');
-  showToast('Connected! Loading Markaz list…', 'info');
-  loadMarkazList();
-}
 
 // Hide banner if URL already saved
 window.addEventListener('DOMContentLoaded', () => {
