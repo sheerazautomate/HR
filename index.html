@@ -1030,7 +1030,7 @@ function verifySchool() {
   const schoolGender  = school.gender.toLowerCase(); // 'male', 'female', 'mixed', etc.
 
   // Gender check: male teacher cannot go to female school
-  if (teacherGender === 'male' && schoolGender === 'female') {
+  if (teacherGender === 'm' && schoolGender === 'female') {
     showSchoolResult('err',
       `✗ Gender Mismatch — ${school.name}`,
       `This is a <strong>Female</strong> school. A Male teacher cannot be transferred here.`
