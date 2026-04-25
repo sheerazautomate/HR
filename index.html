@@ -382,13 +382,7 @@ function getGasUrl() { return GAS_URL; }
 
 // Hide banner if URL already saved
 window.addEventListener('DOMContentLoaded', () => {
-  const saved = getGasUrl();
-  if (saved) {
-    document.getElementById('configBanner').classList.add('d-none');
-    loadMarkazList();
-  } else {
-    document.getElementById('gasUrlInput').value = '';
-  }
+  loadMarkazList();
 });
 
 // ══════════════════════════════════════════════════════════════
