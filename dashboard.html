@@ -3,252 +3,206 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Staff Dashboard - Home</title>
+  <title>Staff Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet"/>
-  <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --bg-primary: #f8fafc;
+      --bg-primary:   #f8fafc;
       --bg-secondary: #ffffff;
-      --bg-card: #ffffff;
+      --bg-card:      #ffffff;
       --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --text-muted: #94a3b8;
-      --border: #e2e8f0;
-      --accent: #f97316;
-      --accent-dark: #ea580c;
+      --text-secondary:#475569;
+      --text-muted:   #94a3b8;
+      --border:       #e2e8f0;
+      --accent:       #f97316;
+      --accent-dark:  #ea580c;
       --accent-light: #ffedd5;
-      --success: #10b981;
-      --danger: #ef4444;
-      --purple: #8b5cf6;
-      --teal: #14b8a6;
-      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-      --radius: 1rem;
-      --radius-sm: 0.5rem;
+      --success:      #10b981;
+      --danger:       #ef4444;
+      --purple:       #8b5cf6;
+      --teal:         #14b8a6;
+      --shadow:       0 1px 3px 0 rgb(0 0 0 / 0.1);
+      --shadow-lg:    0 10px 15px -3px rgb(0 0 0 / 0.1);
+      --radius:       1rem;
+      --radius-sm:    0.5rem;
     }
 
     body.dark {
-      --bg-primary: #0f172a;
+      --bg-primary:   #0f172a;
       --bg-secondary: #1e293b;
-      --bg-card: #1e293b;
+      --bg-card:      #1e293b;
       --text-primary: #f1f5f9;
-      --text-secondary: #cbd5e1;
-      --text-muted: #64748b;
-      --border: #334155;
+      --text-secondary:#cbd5e1;
+      --text-muted:   #64748b;
+      --border:       #334155;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Inter', sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
-      transition: all 0.3s ease;
+      transition: background 0.3s, color 0.3s;
     }
 
-    /* Topbar */
+    /* ── Topbar ─────────────────────────────────────────────── */
     .topbar {
       background: var(--bg-card);
       border-bottom: 1px solid var(--border);
       padding: 0 1.5rem;
       height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
     }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
+    .logo { display: flex; align-items: center; gap: 0.75rem; }
     .logo-icon {
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
       background: linear-gradient(135deg, var(--accent), var(--accent-dark));
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
+      display: flex; align-items: center; justify-content: center; color: white;
     }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
+    .user-info { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
     .user-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: var(--accent-light);
-      border-radius: 2rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 0.9rem;
+      background: var(--accent-light); border-radius: 2rem;
+      font-size: 0.85rem; font-weight: 500;
     }
-
     .role-badge {
-      font-size: 0.7rem;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      background: var(--accent);
-      color: white;
+      font-size: 0.65rem; padding: 0.15rem 0.5rem;
+      border-radius: 20px; background: var(--accent); color: white;
     }
 
+    /* ── Cards & buttons ────────────────────────────────────── */
     .glass-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      transition: all 0.3s;
     }
 
-    .quick-buttons {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.5rem;
-    }
-
+    .quick-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
     .quick-btn {
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
+      padding: 0.5rem 1rem; border-radius: 10px;
+      font-size: 0.8rem; font-weight: 600; border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      transition: opacity 0.2s;
     }
-
-    .quick-btn-oot { background: var(--teal); color: white; }
-    .quick-btn-ood { background: var(--purple); color: white; }
-    .quick-btn-retirement { background: #f59e0b; color: white; }
-    .quick-btn-resignation { background: #ef4444; color: white; }
+    .quick-btn:hover { opacity: 0.85; }
+    .quick-btn-oot        { background: var(--teal);   color: white; }
+    .quick-btn-ood        { background: var(--purple);  color: white; }
+    .quick-btn-retirement { background: #f59e0b;        color: white; }
+    .quick-btn-resignation{ background: #ef4444;        color: white; }
 
     .hierarchy-select {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 0.6rem 0.8rem;
-      font-size: 0.85rem;
-      color: var(--text-primary);
-      width: 100%;
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 0.6rem 0.8rem;
+      font-size: 0.85rem; color: var(--text-primary); width: 100%;
+      font-family: inherit;
     }
 
     .btn-modern {
       background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
+      color: white; border: none; padding: 0.55rem 1.1rem;
+      border-radius: 10px; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: opacity 0.2s;
     }
+    .btn-modern:hover { opacity: 0.9; }
 
     .action-btn {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      padding: 0.3rem 0.8rem;
-      border-radius: 8px;
-      font-size: 0.75rem;
-      cursor: pointer;
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      padding: 0.3rem 0.8rem; border-radius: 8px;
+      font-size: 0.75rem; cursor: pointer; font-family: inherit;
+      transition: background 0.2s, color 0.2s;
     }
+    .action-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
 
-    .action-btn:hover {
-      background: var(--accent);
-      color: white;
-    }
-
-    .toast-container {
-      position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
-      z-index: 9999;
-    }
-
+    /* ── Toast ──────────────────────────────────────────────── */
+    .toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; }
     .toast-custom {
-      background: var(--bg-card);
-      border-left: 4px solid var(--accent);
-      border-radius: 12px;
-      padding: 0.75rem 1rem;
-      margin-top: 0.5rem;
-      box-shadow: var(--shadow-lg);
-      animation: slideIn 0.3s ease;
+      background: var(--bg-card); border-left: 4px solid var(--accent);
+      border-radius: 12px; padding: 0.75rem 1rem;
+      margin-top: 0.5rem; box-shadow: var(--shadow-lg);
+      animation: slideIn 0.3s ease; min-width: 220px; color: var(--text-primary);
     }
-
+    .toast-custom.success { border-color: var(--success); }
+    .toast-custom.error   { border-color: var(--danger); }
     @keyframes slideIn {
       from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      to   { transform: translateX(0);   opacity: 1; }
     }
 
-    /* User Management Modal */
-    .user-table {
-      width: 100%;
-      overflow-x: auto;
-    }
-
-    .user-table th, .user-table td {
-      padding: 0.75rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-
+    /* ── User management ────────────────────────────────────── */
     .delete-user-btn {
-      background: var(--danger);
-      color: white;
-      border: none;
-      padding: 0.25rem 0.5rem;
-      border-radius: 6px;
-      cursor: pointer;
+      background: var(--danger); color: white;
+      border: none; padding: 0.2rem 0.5rem;
+      border-radius: 6px; cursor: pointer; font-size: 0.78rem;
+    }
+
+    /* ── Action pill ────────────────────────────────────────── */
+    .action-pill {
+      text-align: center; padding: 0.75rem;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      cursor: pointer; transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .action-pill:hover { background: var(--accent-light); border-color: var(--accent); }
+    .action-pill.selected { border-color: var(--accent); background: var(--accent-light); }
+
+    /* ── Loading overlay ────────────────────────────────────── */
+    #loadingOverlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.65); backdrop-filter: blur(6px);
+      z-index: 1000; display: flex; align-items: center; justify-content: center;
+    }
+    #loadingOverlay .load-card {
+      background: var(--bg-card); border-radius: var(--radius);
+      padding: 2.5rem 3rem; text-align: center;
     }
 
     @media (max-width: 768px) {
       .topbar { padding: 0 1rem; height: 60px; }
-      .quick-btn { padding: 0.4rem 0.8rem; font-size: 0.7rem; }
+      .quick-btn { padding: 0.35rem 0.7rem; font-size: 0.72rem; }
     }
   </style>
 </head>
 <body>
 
-<div id="loadingOverlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center;">
-  <div class="glass-card" style="padding: 2rem; text-align: center;">
+<!-- Loading overlay (visible until initialize() completes) -->
+<div id="loadingOverlay">
+  <div class="load-card">
     <i class="fas fa-spinner fa-spin fa-3x" style="color: var(--accent);"></i>
-    <p style="margin-top: 1rem;">Loading dashboard...</p>
+    <p style="margin-top: 1rem; font-weight: 500;">Loading dashboard…</p>
+    <p id="loadingStatus" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;"></p>
   </div>
 </div>
 
+<!-- ── Topbar ─────────────────────────────────────────────── -->
 <header class="topbar">
   <div class="logo">
     <div class="logo-icon"><i class="fas fa-school"></i></div>
     <div>
-      <h3 style="margin: 0; font-size: 1.1rem;">Staff Dashboard</h3>
-      <p style="margin: 0; font-size: 0.7rem; color: var(--text-muted);">Punjab Education Department</p>
+      <h3 style="margin:0; font-size:1.05rem;">Staff Dashboard</h3>
+      <p style="margin:0; font-size:0.68rem; color:var(--text-muted);">Punjab Education Department</p>
     </div>
   </div>
   <div class="user-info">
     <div class="user-badge">
-      <i class="fas fa-user"></i>
-      <span id="userName">Loading...</span>
-      <span id="userRole" class="role-badge">Loading...</span>
+      <i class="fas fa-user-circle"></i>
+      <span id="userName">—</span>
+      <span id="userRole" class="role-badge">—</span>
     </div>
-    <button id="adminPanelBtn" class="btn-modern" style="background: var(--purple); display: none;" onclick="openAdminPanel()">
+    <button id="adminPanelBtn" class="btn-modern"
+            style="background: var(--purple); display:none;"
+            onclick="openAdminPanel()">
       <i class="fas fa-users-cog"></i> Admin
     </button>
-    <button class="theme-toggle" onclick="toggleTheme()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">
+    <button onclick="toggleTheme()"
+            style="background:none; border:none; font-size:1.1rem; cursor:pointer; color:var(--text-secondary);">
       <i id="themeIcon" class="fas fa-moon"></i>
     </button>
     <button class="action-btn" onclick="logout()">
@@ -257,147 +211,151 @@
   </div>
 </header>
 
+<!-- ── Main content ─────────────────────────────────────────── -->
 <main style="padding: 1.5rem; max-width: 1600px; margin: 0 auto;">
-  
+
+  <!-- Archive quick buttons -->
   <div class="quick-buttons">
-    <button class="quick-btn quick-btn-oot" onclick="showArchiveModal('OOT')">
+    <button class="quick-btn quick-btn-oot"        onclick="showArchiveModal('OOT')">
       <i class="fas fa-exchange-alt"></i> OOT Archive
     </button>
-    <button class="quick-btn quick-btn-ood" onclick="showArchiveModal('OOD')">
+    <button class="quick-btn quick-btn-ood"        onclick="showArchiveModal('OOD')">
       <i class="fas fa-globe"></i> OOD Archive
     </button>
     <button class="quick-btn quick-btn-retirement" onclick="showArchiveModal('Retirement')">
       <i class="fas fa-user-check"></i> Retirement Archive
     </button>
-    <button class="quick-btn quick-btn-resignation" onclick="showArchiveModal('Resignation')">
+    <button class="quick-btn quick-btn-resignation"onclick="showArchiveModal('Resignation')">
       <i class="fas fa-user-slash"></i> Resignation Archive
     </button>
   </div>
 
+  <!-- Hierarchy filter card -->
   <div class="glass-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
-    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
-      <i class="fas fa-layer-group" style="color: var(--accent);"></i>
-      <span style="font-weight: 600;">Location Hierarchy</span>
+    <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+      <i class="fas fa-layer-group" style="color:var(--accent);"></i>
+      <span style="font-weight:600;">Location Hierarchy Filter</span>
     </div>
     <div class="row g-3">
       <div class="col-md-3">
-        <label class="form-label" style="font-size: 0.7rem;">District</label>
+        <label class="form-label" style="font-size:0.7rem; font-weight:600;">District</label>
         <select id="districtSelect" class="hierarchy-select" onchange="onDistrictChange()">
           <option value="all">All Districts</option>
         </select>
       </div>
       <div class="col-md-3">
-        <label class="form-label" style="font-size: 0.7rem;">Wing</label>
+        <label class="form-label" style="font-size:0.7rem; font-weight:600;">Wing</label>
         <select id="wingSelect" class="hierarchy-select" onchange="onWingChange()" disabled>
           <option value="all">All Wings</option>
         </select>
       </div>
       <div class="col-md-3">
-        <label class="form-label" style="font-size: 0.7rem;">Tehsil</label>
+        <label class="form-label" style="font-size:0.7rem; font-weight:600;">Tehsil</label>
         <select id="tehsilSelect" class="hierarchy-select" onchange="onTehsilChange()" disabled>
           <option value="all">All Tehsils</option>
         </select>
       </div>
       <div class="col-md-3">
-        <label class="form-label" style="font-size: 0.7rem;">Markaz</label>
+        <label class="form-label" style="font-size:0.7rem; font-weight:600;">Markaz</label>
         <select id="markazSelect" class="hierarchy-select" onchange="onMarkazChange()" disabled>
           <option value="all">All Markaz</option>
         </select>
       </div>
     </div>
-    <div style="margin-top: 1.5rem;">
+    <div style="margin-top:1.25rem; display:flex; align-items:center; gap:1rem;">
       <button class="btn-modern" onclick="applyHierarchyFilter()">
         <i class="fas fa-search"></i> Show Staff
       </button>
-      <span id="hierarchyScopeBadge" style="margin-left: 1rem; font-size: 0.75rem;"></span>
+      <span id="hierarchyScopeBadge" style="font-size:0.75rem; color:var(--text-muted);"></span>
     </div>
   </div>
 
+  <!-- Results area -->
   <div id="resultsArea">
     <div class="glass-card" style="padding: 3rem; text-align: center;">
-      <i class="fas fa-filter" style="font-size: 3rem; color: var(--text-muted);"></i>
-      <p style="margin-top: 1rem;">Select filters and click "Show Staff"</p>
+      <i class="fas fa-filter" style="font-size:3rem; color:var(--text-muted);"></i>
+      <p style="margin-top:1rem; color:var(--text-muted);">Select filters and click "Show Staff"</p>
     </div>
   </div>
 
 </main>
 
+<!-- Toast container -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- Action Modal -->
+<!-- ── Action Modal ──────────────────────────────────────────── -->
 <div class="modal fade" id="actionModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content" style="background:var(--bg-card); color:var(--text-primary);">
+      <div class="modal-header" style="border-color:var(--border);">
         <h5 class="modal-title"><i class="fas fa-user-cog"></i> Teacher Action</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div id="teacherStrip" style="background: var(--accent-light); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;"></div>
+        <div id="teacherStrip"
+             style="background:var(--accent-light); border-radius:12px; padding:1rem; margin-bottom:1.5rem;">
+        </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.5rem; margin-bottom: 1.5rem;">
-          <div class="action-pill" data-type="same" onclick="selectPill(this)" style="text-align: center; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">
-            <i class="fas fa-school"></i>
-            <div style="font-size: 0.7rem;">Within Tehsil</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(100px,1fr)); gap:0.5rem; margin-bottom:1.5rem;">
+          <div class="action-pill" data-type="same"       onclick="selectPill(this)">
+            <i class="fas fa-school"></i><div style="font-size:0.7rem; margin-top:4px;">Within Tehsil</div>
           </div>
-          <div class="action-pill" data-type="oot" onclick="selectPill(this)" style="text-align: center; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">
-            <i class="fas fa-truck"></i>
-            <div style="font-size: 0.7rem;">Out of Tehsil</div>
+          <div class="action-pill" data-type="oot"        onclick="selectPill(this)">
+            <i class="fas fa-truck"></i><div style="font-size:0.7rem; margin-top:4px;">Out of Tehsil</div>
           </div>
-          <div class="action-pill" data-type="ood" onclick="selectPill(this)" style="text-align: center; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">
-            <i class="fas fa-plane"></i>
-            <div style="font-size: 0.7rem;">Out of District</div>
+          <div class="action-pill" data-type="ood"        onclick="selectPill(this)">
+            <i class="fas fa-plane"></i><div style="font-size:0.7rem; margin-top:4px;">Out of District</div>
           </div>
-          <div class="action-pill" data-type="retirement" onclick="selectPill(this)" style="text-align: center; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">
-            <i class="fas fa-medal"></i>
-            <div style="font-size: 0.7rem;">Retirement</div>
+          <div class="action-pill" data-type="retirement" onclick="selectPill(this)">
+            <i class="fas fa-medal"></i><div style="font-size:0.7rem; margin-top:4px;">Retirement</div>
           </div>
-          <div class="action-pill" data-type="resignation" onclick="selectPill(this)" style="text-align: center; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">
-            <i class="fas fa-file-signature"></i>
-            <div style="font-size: 0.7rem;">Resignation</div>
+          <div class="action-pill" data-type="resignation"onclick="selectPill(this)">
+            <i class="fas fa-file-signature"></i><div style="font-size:0.7rem; margin-top:4px;">Resignation</div>
           </div>
         </div>
 
-        <div id="emisSection" style="display: none;">
-          <label>New School EMIS Code</label>
+        <div id="emisSection" style="display:none;">
+          <label class="form-label" style="font-weight:600;">New School EMIS Code</label>
           <div class="input-group">
             <input type="text" id="newEmisInput" class="form-control" placeholder="Enter EMIS Code">
             <button class="btn btn-outline-primary" onclick="verifySchool()">Verify</button>
           </div>
-          <div id="schoolResult" class="mt-2" style="display: none;"></div>
+          <div id="schoolResult" class="mt-2" style="display:none;"></div>
         </div>
 
-        <div id="notifSection" style="display: none;">
-          <label>Notification No.</label>
+        <div id="notifSection" style="display:none;">
+          <label class="form-label" style="font-weight:600;">Notification No.</label>
           <input type="text" id="notifInput" class="form-control" placeholder="Enter Notification Number">
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="border-color:var(--border);">
         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn-modern" id="confirmBtn" onclick="submitAction()" disabled>Confirm Action</button>
+        <button class="btn-modern" id="confirmBtn" onclick="submitAction()" disabled>
+          Confirm Action
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Archive Modal -->
+<!-- ── Archive Modal ─────────────────────────────────────────── -->
 <div class="modal fade" id="archiveModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content" style="background:var(--bg-card); color:var(--text-primary);">
+      <div class="modal-header" style="border-color:var(--border);">
         <h5 class="modal-title" id="archiveModalTitle">Archive View</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body" id="archiveModalBody">Loading...</div>
+      <div class="modal-body" id="archiveModalBody">Loading…</div>
     </div>
   </div>
 </div>
 
-<!-- Admin Panel Modal -->
+<!-- ── Admin Panel Modal ─────────────────────────────────────── -->
 <div class="modal fade" id="adminModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content" style="background:var(--bg-card); color:var(--text-primary);">
+      <div class="modal-header" style="border-color:var(--border);">
         <h5 class="modal-title"><i class="fas fa-users-cog"></i> User Management</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
@@ -406,6 +364,7 @@
   </div>
 </div>
 
+<!-- ── External scripts (must load before inline JS) ────────── -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -418,51 +377,91 @@
 <script>
 // ══════════════════════════════════════════════════════════════
 //  CONFIGURATION
+//  Replace GAS_URL with your deployed Google Apps Script Web App URL.
+//  In Apps Script: Deploy → Manage Deployments → copy "Web app URL"
 // ══════════════════════════════════════════════════════════════
-const GAS_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
-let authToken = null;
-let currentUser = null;
-let schoolsMap = {};
-let staffDataCache = { headers: [], rows: [] };
-let currentHierarchy = { district: 'all', wing: 'all', tehsil: 'all', markaz: 'all' };
-let activeTeacher = null;
-let activeType = null;
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwqxPxKOyQL_MUx9BA70SOcdObhuCXBqU9hKdrMRBh_JJgJUKgE_Pz_2yJtWSrnQZFQ/exec';
+
+// ── State ─────────────────────────────────────────────────────
+let authToken       = null;
+let currentUser     = null;
+let schoolsMap      = {};
+let staffDataCache  = { headers: [], rows: [] };
+let currentHierarchy= { district: 'all', wing: 'all', tehsil: 'all', markaz: 'all' };
+let activeTeacher   = null;
+let activeType      = null;
 let verifiedSchoolData = null;
-let currentDataTable = null;
-let hierarchyData = null;
+let currentDataTable   = null;
+let hierarchyData      = null;
+
+// ── Apply saved theme immediately ────────────────────────────
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark');
+  document.getElementById('themeIcon').classList.replace('fa-moon', 'fa-sun');
+}
 
 // ══════════════════════════════════════════════════════════════
-//  AUTHENTICATION CHECK
+//  HELPERS
+// ══════════════════════════════════════════════════════════════
+function setLoadingStatus(msg) {
+  const el = document.getElementById('loadingStatus');
+  if (el) el.textContent = msg;
+}
+
+function showLoading()  { document.getElementById('loadingOverlay').style.display = 'flex'; }
+function hideLoading()  { document.getElementById('loadingOverlay').style.display = 'none'; }
+
+/**
+ * Fetch wrapper: automatically redirects to login if the backend
+ * returns needLogin:true (session expired mid-session).
+ */
+async function apiFetch(url, options) {
+  const response = await fetch(url, options || { redirect: 'follow' });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const data = await response.json();
+  if (data && data.needLogin) {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    window.location.href = 'login.html';
+    throw new Error('Session expired');
+  }
+  return data;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  AUTHENTICATION
 // ══════════════════════════════════════════════════════════════
 async function checkAuth() {
   authToken = localStorage.getItem('authToken');
   const userStr = localStorage.getItem('user');
-  
+
   if (!authToken || !userStr) {
     window.location.href = 'login.html';
     return false;
   }
-  
+
   try {
     currentUser = JSON.parse(userStr);
     document.getElementById('userName').textContent = currentUser.username;
-    document.getElementById('userRole').textContent = currentUser.role.replace('_', ' ').toUpperCase();
-    
+    document.getElementById('userRole').textContent =
+      currentUser.role.replace(/_/g, ' ').toUpperCase();
+
     if (currentUser.role === 'super_admin') {
-      document.getElementById('adminPanelBtn').style.display = 'block';
+      document.getElementById('adminPanelBtn').style.display = 'inline-flex';
     }
-    
-    // Verify session with server
-    const response = await fetch(`${GAS_URL}?action=verifySession&token=${encodeURIComponent(authToken)}`);
-    const data = await response.json();
-    
+
+    // Verify session is still alive on the server
+    setLoadingStatus('Verifying session…');
+    const data = await apiFetch(
+      `${GAS_URL}?action=verifySession&token=${encodeURIComponent(authToken)}`
+    );
+
     if (!data.success) {
-      throw new Error('Session expired');
+      throw new Error('Session invalid');
     }
-    
     return true;
-  } catch (error) {
-    console.error('Auth error:', error);
+  } catch (err) {
+    console.error('Auth check failed:', err);
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     window.location.href = 'login.html';
@@ -474,49 +473,59 @@ async function checkAuth() {
 //  INITIALIZATION
 // ══════════════════════════════════════════════════════════════
 async function initialize() {
-  const isAuth = await checkAuth();
-  if (!isAuth) return;
-  
-  document.getElementById('loadingOverlay').style.display = 'flex';
-  
+  showLoading();
+  const ok = await checkAuth();
+  if (!ok) return;
+
   try {
+    setLoadingStatus('Loading hierarchy data…');
     await loadHierarchyLists();
+
+    setLoadingStatus('Loading schools…');
     await loadSchoolsData();
+
+    setLoadingStatus('Loading staff records…');
     await loadStaffData();
-    document.getElementById('loadingOverlay').style.display = 'none';
+
+    hideLoading();
     showToast('Dashboard ready!', 'success');
-  } catch (error) {
-    console.error('Init error:', error);
-    document.getElementById('loadingOverlay').style.display = 'none';
-    showToast('Error loading data: ' + error.message, 'error');
+  } catch (err) {
+    console.error('Initialization error:', err);
+    hideLoading();
+    showToast('Error loading data: ' + err.message, 'error');
   }
 }
 
 async function loadHierarchyLists() {
-  const response = await fetch(`${GAS_URL}?action=getHierarchyLists&token=${encodeURIComponent(authToken)}`);
-  const data = await response.json();
-  
+  const data = await apiFetch(
+    `${GAS_URL}?action=getHierarchyLists&token=${encodeURIComponent(authToken)}`
+  );
   if (data.success) {
     hierarchyData = data;
-    populateDistrictDropdown(data.districts);
+    populateDistrictDropdown(data.districts || []);
+  } else {
+    console.warn('getHierarchyLists:', data.message);
   }
 }
 
 function populateDistrictDropdown(districts) {
-  const districtSelect = document.getElementById('districtSelect');
-  districtSelect.innerHTML = '<option value="all">All Districts</option>';
+  const sel = document.getElementById('districtSelect');
+  sel.innerHTML = '<option value="all">All Districts</option>';
   districts.forEach(d => {
     const opt = document.createElement('option');
     opt.value = opt.textContent = d;
-    districtSelect.appendChild(opt);
+    sel.appendChild(opt);
   });
 }
 
 async function loadSchoolsData() {
-  const response = await fetch(`${GAS_URL}?action=getAllSchools&token=${encodeURIComponent(authToken)}`);
-  const data = await response.json();
+  const data = await apiFetch(
+    `${GAS_URL}?action=getAllSchools&token=${encodeURIComponent(authToken)}`
+  );
   if (data.success) {
-    buildSchoolsMap(data.data);
+    buildSchoolsMap(data.data || []);
+  } else {
+    console.warn('getAllSchools:', data.message);
   }
 }
 
@@ -524,104 +533,105 @@ function buildSchoolsMap(schools) {
   schoolsMap = {};
   schools.forEach(s => {
     if (s && s[0]) {
-      schoolsMap[s[0].toString().trim()] = {
-        name: s[1] || '', markaz: s[2] || '', tehsil: s[3] || '',
-        district: s[4] || '', gender: s[5] || '', area: s[6] || '', wing: s[7] || ''
+      const emis = s[0].toString().trim();
+      schoolsMap[emis] = {
+        name:     s[1] || '',
+        markaz:   s[2] || '',
+        tehsil:   s[3] || '',
+        district: s[4] || '',
+        gender:   s[5] || '',
+        area:     s[6] || '',
+        wing:     s[7] || ''
       };
     }
   });
 }
 
 async function loadStaffData() {
-  const response = await fetch(`${GAS_URL}?action=getStaffData&token=${encodeURIComponent(authToken)}`);
-  const data = await response.json();
+  const data = await apiFetch(
+    `${GAS_URL}?action=getStaffData&token=${encodeURIComponent(authToken)}`
+  );
   if (data.success) {
-    staffDataCache = { headers: data.headers, rows: data.data };
+    staffDataCache = { headers: data.headers || [], rows: data.data || [] };
+  } else {
+    console.warn('getStaffData:', data.message);
   }
 }
 
 // ══════════════════════════════════════════════════════════════
-//  HIERARCHY FUNCTIONS
+//  HIERARCHY SELECTS
 // ══════════════════════════════════════════════════════════════
 function onDistrictChange() {
   const district = document.getElementById('districtSelect').value;
-  const wingSelect = document.getElementById('wingSelect');
-  const tehsilSelect = document.getElementById('tehsilSelect');
-  const markazSelect = document.getElementById('markazSelect');
-  
+  const wingEl   = document.getElementById('wingSelect');
+  const tehsilEl = document.getElementById('tehsilSelect');
+  const markazEl = document.getElementById('markazSelect');
+
+  wingEl.innerHTML   = '<option value="all">All Wings</option>';
+  tehsilEl.innerHTML = '<option value="all">All Tehsils</option>';
+  markazEl.innerHTML = '<option value="all">All Markaz</option>';
+  tehsilEl.disabled = true;
+  markazEl.disabled = true;
+
   if (district === 'all') {
-    wingSelect.innerHTML = '<option value="all">All Wings</option>';
-    tehsilSelect.innerHTML = '<option value="all">All Tehsils</option>';
-    markazSelect.innerHTML = '<option value="all">All Markaz</option>';
-    wingSelect.disabled = true;
-    tehsilSelect.disabled = true;
-    markazSelect.disabled = true;
+    wingEl.disabled = true;
     return;
   }
-  
-  wingSelect.disabled = false;
-  wingSelect.innerHTML = '<option value="all">All Wings</option>';
-  const wings = hierarchyData.wingsByDistrict[district] || [];
+
+  wingEl.disabled = false;
+  const wings = (hierarchyData && hierarchyData.wingsByDistrict[district]) || [];
   wings.forEach(w => {
-    const opt = document.createElement('option');
-    opt.value = opt.textContent = w;
-    wingSelect.appendChild(opt);
+    const o = document.createElement('option');
+    o.value = o.textContent = w;
+    wingEl.appendChild(o);
   });
-  
-  tehsilSelect.innerHTML = '<option value="all">All Tehsils</option>';
-  markazSelect.innerHTML = '<option value="all">All Markaz</option>';
-  tehsilSelect.disabled = true;
-  markazSelect.disabled = true;
 }
 
 function onWingChange() {
   const district = document.getElementById('districtSelect').value;
-  const wing = document.getElementById('wingSelect').value;
-  const tehsilSelect = document.getElementById('tehsilSelect');
-  const markazSelect = document.getElementById('markazSelect');
-  
+  const wing     = document.getElementById('wingSelect').value;
+  const tehsilEl = document.getElementById('tehsilSelect');
+  const markazEl = document.getElementById('markazSelect');
+
+  tehsilEl.innerHTML = '<option value="all">All Tehsils</option>';
+  markazEl.innerHTML = '<option value="all">All Markaz</option>';
+  markazEl.disabled  = true;
+
   if (wing === 'all') {
-    tehsilSelect.innerHTML = '<option value="all">All Tehsils</option>';
-    markazSelect.innerHTML = '<option value="all">All Markaz</option>';
-    tehsilSelect.disabled = true;
-    markazSelect.disabled = true;
+    tehsilEl.disabled = true;
     return;
   }
-  
-  tehsilSelect.disabled = false;
-  tehsilSelect.innerHTML = '<option value="all">All Tehsils</option>';
-  const key = `${district}|${wing}`;
-  const tehsils = hierarchyData.tehsilsByWing[key] || [];
+
+  tehsilEl.disabled = false;
+  const key    = `${district}|${wing}`;
+  const tehsils= (hierarchyData && hierarchyData.tehsilsByWing[key]) || [];
   tehsils.forEach(t => {
-    const opt = document.createElement('option');
-    opt.value = opt.textContent = t;
-    tehsilSelect.appendChild(opt);
+    const o = document.createElement('option');
+    o.value = o.textContent = t;
+    tehsilEl.appendChild(o);
   });
-  
-  markazSelect.innerHTML = '<option value="all">All Markaz</option>';
-  markazSelect.disabled = true;
 }
 
 function onTehsilChange() {
   const district = document.getElementById('districtSelect').value;
-  const wing = document.getElementById('wingSelect').value;
-  const tehsil = document.getElementById('tehsilSelect').value;
-  const markazSelect = document.getElementById('markazSelect');
-  
+  const wing     = document.getElementById('wingSelect').value;
+  const tehsil   = document.getElementById('tehsilSelect').value;
+  const markazEl = document.getElementById('markazSelect');
+
+  markazEl.innerHTML = '<option value="all">All Markaz</option>';
+
   if (tehsil === 'all') {
-    markazSelect.innerHTML = '<option value="all">All Markaz</option>';
-    markazSelect.disabled = true;
+    markazEl.disabled = true;
     return;
   }
-  
-  markazSelect.disabled = false;
-  markazSelect.innerHTML = '<option value="all">All Markaz</option>';
-  const key = `${district}|${wing}|${tehsil}`;
-  const markazList = hierarchyData.markazByTehsil[key] || [];
-  markazList.forEach(m => {
-    const opt = document.createElement('option');
-    opt.value = opt.textContent = m;
-    markazSelect.appendChild(opt);
+
+  markazEl.disabled = false;
+  const key     = `${district}|${wing}|${tehsil}`;
+  const markazs = (hierarchyData && hierarchyData.markazByTehsil[key]) || [];
+  markazs.forEach(m => {
+    const o = document.createElement('option');
+    o.value = o.textContent = m;
+    markazEl.appendChild(o);
   });
 }
 
@@ -631,174 +641,228 @@ function onMarkazChange() {
 
 function applyHierarchyFilter() {
   currentHierarchy.district = document.getElementById('districtSelect').value;
-  currentHierarchy.wing = document.getElementById('wingSelect').value;
-  currentHierarchy.tehsil = document.getElementById('tehsilSelect').value;
-  currentHierarchy.markaz = document.getElementById('markazSelect').value;
-  
+  currentHierarchy.wing     = document.getElementById('wingSelect').value;
+  currentHierarchy.tehsil   = document.getElementById('tehsilSelect').value;
+  currentHierarchy.markaz   = document.getElementById('markazSelect').value;
   filterStaffByHierarchy();
 }
 
 function filterStaffByHierarchy() {
+  if (!staffDataCache.rows.length) {
+    showToast('No staff data loaded yet.', 'error');
+    return;
+  }
+
   const filtered = staffDataCache.rows.filter(row => {
-    const emis = row[1] ? row[1].toString().trim() : '';
+    const emis   = row[1] ? row[1].toString().trim() : '';
     const school = schoolsMap[emis];
     if (!school) return false;
-    
+
     if (currentHierarchy.district !== 'all' && school.district !== currentHierarchy.district) return false;
-    if (currentHierarchy.wing !== 'all' && school.wing !== currentHierarchy.wing) return false;
-    if (currentHierarchy.tehsil !== 'all' && school.tehsil !== currentHierarchy.tehsil) return false;
-    if (currentHierarchy.markaz !== 'all' && school.markaz !== currentHierarchy.markaz) return false;
+    if (currentHierarchy.wing     !== 'all' && school.wing     !== currentHierarchy.wing)     return false;
+    if (currentHierarchy.tehsil   !== 'all' && school.tehsil   !== currentHierarchy.tehsil)   return false;
+    if (currentHierarchy.markaz   !== 'all' && school.markaz   !== currentHierarchy.markaz)   return false;
     return true;
   });
-  
+
   renderTable(staffDataCache.headers, filtered);
-  showToast(`Found ${filtered.length} teachers`, 'info');
+  showToast(`Found ${filtered.length} teacher(s)`, 'info');
 }
 
 // ══════════════════════════════════════════════════════════════
 //  TABLE RENDER
 // ══════════════════════════════════════════════════════════════
 function renderTable(headers, rows) {
-  if (currentDataTable) currentDataTable.destroy();
+  // Destroy existing DataTable safely
+  if (currentDataTable) {
+    try { currentDataTable.destroy(); } catch(e) {}
+    currentDataTable = null;
+  }
   if ($('#resultsTable').length) $('#resultsTable').remove();
-  
-  let html = `<div class="glass-card" style="padding: 1rem;">
-    <div style="overflow-x: auto;">
-      <table id="resultsTable" class="table table-hover" style="width: 100%;">
+
+  const area = document.getElementById('resultsArea');
+
+  if (!rows.length) {
+    area.innerHTML = `
+      <div class="glass-card" style="padding:3rem; text-align:center;">
+        <i class="fas fa-users-slash" style="font-size:3rem; color:var(--text-muted);"></i>
+        <p style="margin-top:1rem; color:var(--text-muted);">No teachers found for the selected filters.</p>
+      </div>`;
+    return;
+  }
+
+  let html = `<div class="glass-card" style="padding:1rem;">
+    <div style="overflow-x:auto;">
+      <table id="resultsTable" class="table table-hover" style="width:100%;">
         <thead><tr>`;
   headers.forEach(h => html += `<th>${escapeHtml(String(h))}</th>`);
   html += `<th>Action</th></tr></thead><tbody>`;
-  
+
   rows.forEach(row => {
+    const pno    = escapeAttr(row[0]  || '');
+    const name   = escapeAttr(row[3]  || '');
+    const gender = escapeAttr(row[6]  || '');
+    const emis   = escapeAttr(row[1]  || '');
+
     html += '<tr>';
     row.forEach(cell => html += `<td>${escapeHtml(cell == null ? '' : String(cell))}</td>`);
-    html += `<td><button class="action-btn" onclick='openActionModal("${escapeAttr(row[0])}", "${escapeAttr(row[3])}", "${escapeAttr(row[6])}", "${escapeAttr(row[1])}")'><i class="fas fa-bolt"></i> Action</button></td>`;
+    html += `<td>
+      <button class="action-btn"
+        onclick="openActionModal('${pno}','${name}','${gender}','${emis}')">
+        <i class="fas fa-bolt"></i> Action
+      </button></td>`;
     html += '</tr>';
   });
-  
+
   html += '</tbody></table></div></div>';
-  document.getElementById('resultsArea').innerHTML = html;
-  
+  area.innerHTML = html;
+
   currentDataTable = $('#resultsTable').DataTable({
     scrollX: true,
     dom: 'Bfrtip',
-    buttons: [{ extend: 'excelHtml5', text: '<i class="fas fa-file-excel"></i> Export Excel', className: 'btn-modern' }],
+    buttons: [{
+      extend: 'excelHtml5',
+      text: '<i class="fas fa-file-excel"></i> Export Excel',
+      className: 'btn-modern'
+    }],
     language: { search: '<i class="fas fa-search"></i> Quick Filter:' }
   });
 }
 
 // ══════════════════════════════════════════════════════════════
-//  ACTION MODAL FUNCTIONS
+//  ACTION MODAL
 // ══════════════════════════════════════════════════════════════
 function openActionModal(pno, name, gender, emis) {
-  activeType = null;
+  activeType         = null;
   verifiedSchoolData = null;
-  
+
   const school = schoolsMap[emis] || {};
   activeTeacher = {
-    pno: pno, name: name, gender: gender, emis: emis,
-    currentTehsil: school.tehsil || '',
-    currentDistrict: school.district || ''
+    pno, name, gender, emis,
+    currentTehsil:  school.tehsil   || '',
+    currentDistrict:school.district || ''
   };
-  
+
   document.getElementById('teacherStrip').innerHTML = `
-    <div style="display: flex; align-items: center; gap: 1rem;">
-      <div style="width: 50px; height: 50px; background: var(--accent); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;">
-        <i class="fas fa-user fa-2x"></i>
+    <div style="display:flex; align-items:center; gap:1rem;">
+      <div style="width:48px; height:48px; background:var(--accent); border-radius:12px;
+                  display:flex; align-items:center; justify-content:center; color:white; flex-shrink:0;">
+        <i class="fas fa-user fa-lg"></i>
       </div>
       <div>
-        <div style="font-weight: 700;">${escapeHtml(name)} (${gender === 'M' ? 'Male' : 'Female'})</div>
-        <div style="font-size: 0.8rem;">Personal No: ${pno} | EMIS: ${emis}</div>
-        <div style="font-size: 0.75rem;">Tehsil: ${school.tehsil || 'N/A'} | District: ${school.district || 'N/A'}</div>
+        <div style="font-weight:700;">${escapeHtml(name)}
+          <small style="font-weight:400;">(${gender === 'M' ? 'Male' : 'Female'})</small>
+        </div>
+        <div style="font-size:0.8rem; color:var(--text-secondary);">
+          Personal No: ${escapeHtml(pno)} | EMIS: ${escapeHtml(emis)}
+        </div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">
+          Tehsil: ${escapeHtml(school.tehsil || 'N/A')} |
+          District: ${escapeHtml(school.district || 'N/A')}
+        </div>
       </div>
-    </div>
-  `;
-  
-  document.querySelectorAll('.action-pill').forEach(p => p.style.borderColor = 'var(--border)');
-  document.getElementById('emisSection').style.display = 'none';
+    </div>`;
+
+  document.querySelectorAll('.action-pill').forEach(p => p.classList.remove('selected'));
+  document.getElementById('emisSection').style.display  = 'none';
   document.getElementById('notifSection').style.display = 'none';
-  document.getElementById('newEmisInput').value = '';
-  document.getElementById('notifInput').value = '';
+  document.getElementById('newEmisInput').value  = '';
+  document.getElementById('notifInput').value    = '';
   document.getElementById('schoolResult').style.display = 'none';
   document.getElementById('confirmBtn').disabled = true;
-  
+
   new bootstrap.Modal(document.getElementById('actionModal')).show();
 }
 
 function selectPill(el) {
-  activeType = el.dataset.type;
+  activeType         = el.dataset.type;
   verifiedSchoolData = null;
-  
-  document.querySelectorAll('.action-pill').forEach(p => p.style.borderColor = 'var(--border)');
-  el.style.borderColor = 'var(--accent)';
-  
+
+  document.querySelectorAll('.action-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+
   const isTransfer = ['same', 'oot', 'ood'].includes(activeType);
-  document.getElementById('emisSection').style.display = isTransfer ? 'block' : 'none';
-  document.getElementById('notifSection').style.display = (!isTransfer && activeType) ? 'block' : 'none';
+  document.getElementById('emisSection').style.display   = isTransfer ? 'block' : 'none';
+  document.getElementById('notifSection').style.display  = (!isTransfer) ? 'block' : 'none';
+  document.getElementById('schoolResult').style.display  = 'none';
+  document.getElementById('newEmisInput').value = '';
+  // Transfers require school verification; non-transfers can confirm immediately
   document.getElementById('confirmBtn').disabled = isTransfer;
 }
 
-async function verifySchool() {
-  const emis = document.getElementById('newEmisInput').value.trim();
-  const school = schoolsMap[emis];
-  const resultDiv = document.getElementById('schoolResult');
-  
+function verifySchool() {
+  const emis     = document.getElementById('newEmisInput').value.trim();
+  const school   = schoolsMap[emis];
+  const resultDiv= document.getElementById('schoolResult');
+
   if (!school) {
-    resultDiv.innerHTML = '<div class="alert alert-danger">❌ EMIS not found</div>';
+    resultDiv.innerHTML = '<div class="alert alert-danger">❌ EMIS not found in schools database.</div>';
     resultDiv.style.display = 'block';
+    document.getElementById('confirmBtn').disabled = true;
     return;
   }
-  
+
   // Gender validation
   const teacherGender = activeTeacher.gender === 'M' ? 'male' : 'female';
-  const schoolGender = school.gender.toLowerCase();
-  
+  const schoolGender  = (school.gender || '').toLowerCase();
+
   if (teacherGender === 'male' && schoolGender === 'female') {
-    resultDiv.innerHTML = '<div class="alert alert-danger">❌ Male teacher cannot be transferred to a Female school</div>';
+    resultDiv.innerHTML = '<div class="alert alert-danger">❌ Male teacher cannot be transferred to a Female school.</div>';
     resultDiv.style.display = 'block';
     return;
   }
-  
   if (teacherGender === 'female' && schoolGender === 'male') {
-    resultDiv.innerHTML = '<div class="alert alert-danger">❌ Female teacher cannot be transferred to a Male school</div>';
+    resultDiv.innerHTML = '<div class="alert alert-danger">❌ Female teacher cannot be transferred to a Male school.</div>';
     resultDiv.style.display = 'block';
     return;
   }
-  
+
   // Transfer type validation
-  const currentTehsil = activeTeacher.currentTehsil.toLowerCase().trim();
-  const currentDistrict = activeTeacher.currentDistrict.toLowerCase().trim();
-  const newTehsil = school.tehsil.toLowerCase().trim();
+  const curTehsil   = activeTeacher.currentTehsil.toLowerCase().trim();
+  const curDistrict = activeTeacher.currentDistrict.toLowerCase().trim();
+  const newTehsil   = school.tehsil.toLowerCase().trim();
   const newDistrict = school.district.toLowerCase().trim();
-  
-  if (activeType === 'same' && currentTehsil !== newTehsil) {
-    resultDiv.innerHTML = `<div class="alert alert-danger">❌ Within Tehsil transfer requires same tehsil.<br>Current: ${activeTeacher.currentTehsil}<br>New: ${school.tehsil}</div>`;
+
+  if (activeType === 'same' && curTehsil !== newTehsil) {
+    resultDiv.innerHTML = `<div class="alert alert-danger">❌ Within-Tehsil transfer requires same tehsil.<br>
+      Current: ${escapeHtml(activeTeacher.currentTehsil)}<br>New: ${escapeHtml(school.tehsil)}</div>`;
     resultDiv.style.display = 'block';
     return;
   }
-  
+
   if (activeType === 'oot') {
-    if (currentDistrict !== newDistrict) {
-      resultDiv.innerHTML = `<div class="alert alert-danger">❌ Out of Tehsil transfer must stay in same district.<br>Current: ${activeTeacher.currentDistrict}<br>New: ${school.district}</div>`;
+    if (curDistrict !== newDistrict) {
+      resultDiv.innerHTML = `<div class="alert alert-danger">❌ Out-of-Tehsil transfer must stay in the same district.<br>
+        Current: ${escapeHtml(activeTeacher.currentDistrict)}<br>New: ${escapeHtml(school.district)}</div>`;
       resultDiv.style.display = 'block';
       return;
     }
-    if (currentTehsil === newTehsil) {
-      resultDiv.innerHTML = `<div class="alert alert-danger">❌ Out of Tehsil transfer requires a DIFFERENT tehsil.<br>Both are in: ${school.tehsil}</div>`;
+    if (curTehsil === newTehsil) {
+      resultDiv.innerHTML = `<div class="alert alert-danger">❌ Out-of-Tehsil transfer requires a different tehsil (both are in: ${escapeHtml(school.tehsil)}).</div>`;
       resultDiv.style.display = 'block';
       return;
     }
   }
-  
-  if (activeType === 'ood' && currentDistrict === newDistrict) {
-    resultDiv.innerHTML = `<div class="alert alert-danger">❌ Out of District transfer requires a DIFFERENT district.<br>Current: ${activeTeacher.currentDistrict}</div>`;
+
+  if (activeType === 'ood' && curDistrict === newDistrict) {
+    resultDiv.innerHTML = `<div class="alert alert-danger">❌ Out-of-District transfer requires a different district (current: ${escapeHtml(activeTeacher.currentDistrict)}).</div>`;
     resultDiv.style.display = 'block';
     return;
   }
-  
-  verifiedSchoolData = { emis, name: school.name, markaz: school.markaz, tehsil: school.tehsil, district: school.district };
-  
-  resultDiv.innerHTML = `<div class="alert alert-success">✅ ${school.name}<br><small>Tehsil: ${school.tehsil} | District: ${school.district}</small></div>`;
+
+  // All good
+  verifiedSchoolData = {
+    emis,
+    name:     school.name,
+    markaz:   school.markaz,
+    tehsil:   school.tehsil,
+    district: school.district
+  };
+
+  resultDiv.innerHTML = `<div class="alert alert-success">
+    ✅ <strong>${escapeHtml(school.name)}</strong><br>
+    <small>Tehsil: ${escapeHtml(school.tehsil)} | District: ${escapeHtml(school.district)}</small>
+  </div>`;
   resultDiv.style.display = 'block';
   document.getElementById('confirmBtn').disabled = false;
 }
@@ -806,47 +870,58 @@ async function verifySchool() {
 async function submitAction() {
   const confirmBtn = document.getElementById('confirmBtn');
   confirmBtn.disabled = true;
-  confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-  
+  confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing…';
+
   try {
-    let payload = { action: null, token: authToken };
-    
+    let payload = { token: authToken };
+
     if (['same', 'oot', 'ood'].includes(activeType)) {
-      if (!verifiedSchoolData) throw new Error('Please verify school first');
-      payload.action = 'transfer';
-      payload.personalNo = activeTeacher.pno;
+      if (!verifiedSchoolData) throw new Error('Please verify the school first.');
+      payload.action       = 'transfer';
+      payload.personalNo   = activeTeacher.pno;
       payload.transferType = activeType;
-      payload.newEmis = verifiedSchoolData.emis;
-      payload.newMarkaz = verifiedSchoolData.markaz;
-      payload.newSchoolName = verifiedSchoolData.name;
-      payload.newTehsil = verifiedSchoolData.tehsil;
-      payload.newDistrict = verifiedSchoolData.district;
+      payload.newEmis      = verifiedSchoolData.emis;
+      payload.newMarkaz    = verifiedSchoolData.markaz;
+      payload.newSchoolName= verifiedSchoolData.name;
+      payload.newTehsil    = verifiedSchoolData.tehsil;
+      payload.newDistrict  = verifiedSchoolData.district;
     } else {
-      const notifNo = document.getElementById('notifInput').value.trim();
-      if (!notifNo) throw new Error('Please enter notification number');
-      payload.action = 'retireOrResign';
-      payload.personalNo = activeTeacher.pno;
-      payload.actionType = activeType;
+      const notifNo = (document.getElementById('notifInput').value || '').trim();
+      if (!notifNo) throw new Error('Please enter the notification number.');
+      payload.action         = 'retireOrResign';
+      payload.personalNo     = activeTeacher.pno;
+      payload.actionType     = activeType;
       payload.notificationNo = notifNo;
     }
-    
+
     const response = await fetch(GAS_URL, {
-      method: 'POST',
+      method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body:    JSON.stringify(payload),
+      redirect:'follow'
     });
     const result = await response.json();
-    
+
+    if (result.needLogin) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      window.location.href = 'login.html';
+      return;
+    }
+
     if (result.success) {
       showToast(result.message, 'success');
       bootstrap.Modal.getInstance(document.getElementById('actionModal')).hide();
+      setLoadingStatus('Refreshing staff data…');
+      showLoading();
       await loadStaffData();
+      hideLoading();
       applyHierarchyFilter();
     } else {
       showToast(result.message || 'Action failed', 'error');
     }
-  } catch (error) {
-    showToast(error.message, 'error');
+  } catch (err) {
+    showToast(err.message || 'Unexpected error', 'error');
   } finally {
     confirmBtn.disabled = false;
     confirmBtn.innerHTML = 'Confirm Action';
@@ -857,52 +932,90 @@ async function submitAction() {
 //  ARCHIVE MODAL
 // ══════════════════════════════════════════════════════════════
 async function showArchiveModal(type) {
-  document.getElementById('archiveModalTitle').innerHTML = `<i class="fas fa-archive"></i> ${type} Archive`;
-  document.getElementById('archiveModalBody').innerHTML = '<div class="text-center p-5"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading...</p></div>';
-  
+  document.getElementById('archiveModalTitle').innerHTML =
+    `<i class="fas fa-archive"></i> ${escapeHtml(type)} Archive`;
+  document.getElementById('archiveModalBody').innerHTML =
+    '<div class="text-center p-5"><i class="fas fa-spinner fa-spin fa-2x"></i><p class="mt-2">Loading…</p></div>';
+
+  // Destroy any previous archive DataTable
+  if ($.fn.DataTable.isDataTable('#archiveTable')) {
+    $('#archiveTable').DataTable().destroy();
+    $('#archiveTable').remove();
+  }
+
   const modal = new bootstrap.Modal(document.getElementById('archiveModal'));
   modal.show();
-  
-  const response = await fetch(`${GAS_URL}?action=getArchiveData&archiveType=${type}&token=${encodeURIComponent(authToken)}`);
-  const data = await response.json();
-  
-  if (data.success && data.data && data.data.length > 0) {
-    let html = `<div style="overflow-x: auto;"><table class="table" id="archiveTable"><thead><tr>`;
-    if (data.headers) data.headers.forEach(h => html += `<th>${escapeHtml(String(h))}</th>`);
-    html += `</tr></thead><tbody>`;
-    data.data.forEach(row => {
-      html += '<tr>';
-      row.forEach(cell => html += `<td>${escapeHtml(cell == null ? '' : String(cell))}</td>`);
-      html += '</tr>';
-    });
-    html += `</tbody></table></div>`;
-    document.getElementById('archiveModalBody').innerHTML = html;
-    $('#archiveTable').DataTable({ scrollX: true, dom: 'Bfrtip', buttons: [{ extend: 'excelHtml5', text: 'Export Excel' }] });
-  } else {
-    document.getElementById('archiveModalBody').innerHTML = '<div class="text-center p-5"><i class="fas fa-folder-open fa-3x"></i><p>No records found</p></div>';
+
+  try {
+    const data = await apiFetch(
+      `${GAS_URL}?action=getArchiveData&archiveType=${encodeURIComponent(type)}&token=${encodeURIComponent(authToken)}`
+    );
+
+    if (data.success && data.data && data.data.length > 0) {
+      let html = `<div style="overflow-x:auto;"><table class="table" id="archiveTable"><thead><tr>`;
+      (data.headers || []).forEach(h => html += `<th>${escapeHtml(String(h))}</th>`);
+      html += `</tr></thead><tbody>`;
+      data.data.forEach(row => {
+        html += '<tr>';
+        (row || []).forEach(cell => html += `<td>${escapeHtml(cell == null ? '' : String(cell))}</td>`);
+        html += '</tr>';
+      });
+      html += `</tbody></table></div>`;
+      document.getElementById('archiveModalBody').innerHTML = html;
+
+      $('#archiveTable').DataTable({
+        scrollX: true,
+        dom: 'Bfrtip',
+        buttons: [{ extend: 'excelHtml5', text: '<i class="fas fa-file-excel"></i> Export Excel' }]
+      });
+    } else {
+      document.getElementById('archiveModalBody').innerHTML =
+        '<div class="text-center p-5"><i class="fas fa-folder-open fa-3x" style="color:var(--text-muted);"></i><p class="mt-3">No records found.</p></div>';
+    }
+  } catch (err) {
+    document.getElementById('archiveModalBody').innerHTML =
+      `<div class="alert alert-danger">Error loading archive: ${escapeHtml(err.message)}</div>`;
   }
 }
 
 // ══════════════════════════════════════════════════════════════
 //  ADMIN PANEL
+//  Note: these functions are named adminCreateUser / adminDeleteUser
+//  to avoid collision with any future global `createUser` / `deleteUser`.
 // ══════════════════════════════════════════════════════════════
 async function openAdminPanel() {
-  document.getElementById('adminModalBody').innerHTML = '<div class="text-center p-5"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading users...</p></div>';
+  document.getElementById('adminModalBody').innerHTML =
+    '<div class="text-center p-5"><i class="fas fa-spinner fa-spin fa-2x"></i><p class="mt-2">Loading users…</p></div>';
+
   const modal = new bootstrap.Modal(document.getElementById('adminModal'));
   modal.show();
-  
-  const response = await fetch(`${GAS_URL}?action=getAllUsers&token=${encodeURIComponent(authToken)}`);
-  const data = await response.json();
-  
-  if (data.success) {
+
+  try {
+    const data = await apiFetch(
+      `${GAS_URL}?action=getAllUsers&token=${encodeURIComponent(authToken)}`
+    );
+
+    if (!data.success) {
+      document.getElementById('adminModalBody').innerHTML =
+        `<div class="alert alert-danger">${escapeHtml(data.message || 'Failed to load users.')}</div>`;
+      return;
+    }
+
     let html = `
       <div class="mb-4">
-        <h6>Create New User</h6>
-        <div class="row g-2">
-          <div class="col-md-3"><input type="text" id="newUsername" class="form-control" placeholder="Username"></div>
-          <div class="col-md-3"><input type="password" id="newPassword" class="form-control" placeholder="Password"></div>
-          <div class="col-md-2">
-            <select id="newRole" class="form-control">
+        <h6 class="fw-bold mb-3">Create New User</h6>
+        <div class="row g-2 align-items-end">
+          <div class="col-sm-2">
+            <label class="form-label" style="font-size:0.75rem;">Username</label>
+            <input type="text" id="newUsername" class="form-control form-control-sm" placeholder="username">
+          </div>
+          <div class="col-sm-2">
+            <label class="form-label" style="font-size:0.75rem;">Password</label>
+            <input type="password" id="newPassword" class="form-control form-control-sm" placeholder="password">
+          </div>
+          <div class="col-sm-2">
+            <label class="form-label" style="font-size:0.75rem;">Role</label>
+            <select id="newRole" class="form-select form-select-sm">
               <option value="district">District</option>
               <option value="wing">Wing</option>
               <option value="tehsil">Tehsil</option>
@@ -910,112 +1023,178 @@ async function openAdminPanel() {
               <option value="viewer">Viewer</option>
             </select>
           </div>
-          <div class="col-md-2"><input type="text" id="newDistrict" class="form-control" placeholder="District"></div>
-          <div class="col-md-2"><button class="btn-modern" onclick="createUser()">Create User</button></div>
+          <div class="col-sm-2">
+            <label class="form-label" style="font-size:0.75rem;">District</label>
+            <input type="text" id="newDistrict" class="form-control form-control-sm" placeholder="District (if applicable)">
+          </div>
+          <div class="col-sm-2">
+            <label class="form-label" style="font-size:0.75rem;">Wing</label>
+            <input type="text" id="newWing" class="form-control form-control-sm" placeholder="Wing">
+          </div>
+          <div class="col-sm-1">
+            <label class="form-label" style="font-size:0.75rem;">Tehsil</label>
+            <input type="text" id="newTehsil" class="form-control form-control-sm" placeholder="Tehsil">
+          </div>
+          <div class="col-sm-1">
+            <label class="form-label" style="font-size:0.75rem;">Markaz</label>
+            <input type="text" id="newMarkaz" class="form-control form-control-sm" placeholder="Markaz">
+          </div>
+          <div class="col-sm-12 mt-2">
+            <button class="btn-modern" onclick="adminCreateUser()">
+              <i class="fas fa-user-plus"></i> Create User
+            </button>
+          </div>
         </div>
       </div>
       <hr>
-      <div class="user-table">
-        <table class="table">
-          <thead><tr><th>Username</th><th>Role</th><th>District</th><th>Wing</th><th>Tehsil</th><th>Markaz</th><th>Action</th></tr></thead>
-          <tbody>
-    `;
+      <div style="overflow-x:auto;">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>Username</th><th>Role</th><th>District</th>
+              <th>Wing</th><th>Tehsil</th><th>Markaz</th><th>Created</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
     data.data.forEach(user => {
       html += `<tr>
         <td>${escapeHtml(user.username)}</td>
-        <td>${user.role}</td>
-        <td>${user.district || '-'}</td>
-        <td>${user.wing || '-'}</td>
-        <td>${user.tehsil || '-'}</td>
-        <td>${user.markaz || '-'}</td>
-        <td><button class="delete-user-btn" onclick="deleteUser('${user.username}')"><i class="fas fa-trash"></i></button></td>
+        <td><span class="role-badge" style="background:var(--purple);">${escapeHtml(user.role)}</span></td>
+        <td>${escapeHtml(user.district || '—')}</td>
+        <td>${escapeHtml(user.wing     || '—')}</td>
+        <td>${escapeHtml(user.tehsil   || '—')}</td>
+        <td>${escapeHtml(user.markaz   || '—')}</td>
+        <td style="font-size:0.75rem;">${escapeHtml(String(user.createdAt || '').substring(0, 10))}</td>
+        <td>
+          <button class="delete-user-btn"
+                  onclick="adminDeleteUser('${escapeAttr(user.username)}')">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
       </tr>`;
     });
+
     html += `</tbody></table></div>`;
     document.getElementById('adminModalBody').innerHTML = html;
+
+  } catch (err) {
+    document.getElementById('adminModalBody').innerHTML =
+      `<div class="alert alert-danger">Error: ${escapeHtml(err.message)}</div>`;
   }
 }
 
-async function createUser() {
-  const username = document.getElementById('newUsername').value.trim();
-  const password = document.getElementById('newPassword').value;
-  const role = document.getElementById('newRole').value;
-  const district = document.getElementById('newDistrict').value.trim();
-  
+async function adminCreateUser() {
+  const username = (document.getElementById('newUsername').value || '').trim();
+  const password =  document.getElementById('newPassword').value || '';
+  const role     =  document.getElementById('newRole').value;
+  const district = (document.getElementById('newDistrict').value || '').trim();
+  const wing     = (document.getElementById('newWing').value     || '').trim();
+  const tehsil   = (document.getElementById('newTehsil').value   || '').trim();
+  const markaz   = (document.getElementById('newMarkaz').value   || '').trim();
+
   if (!username || !password) {
-    showToast('Username and password required', 'error');
+    showToast('Username and password are required.', 'error');
     return;
   }
-  
-  const response = await fetch(`${GAS_URL}?action=createUser&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&role=${role}&district=${encodeURIComponent(district)}&token=${encodeURIComponent(authToken)}`);
-  const result = await response.json();
-  
-  if (result.success) {
-    showToast('User created successfully', 'success');
-    openAdminPanel();
-  } else {
-    showToast(result.message, 'error');
+
+  try {
+    const url = `${GAS_URL}?action=createUser`
+      + `&username=${encodeURIComponent(username)}`
+      + `&password=${encodeURIComponent(password)}`
+      + `&role=${encodeURIComponent(role)}`
+      + `&district=${encodeURIComponent(district)}`
+      + `&wing=${encodeURIComponent(wing)}`
+      + `&tehsil=${encodeURIComponent(tehsil)}`
+      + `&markaz=${encodeURIComponent(markaz)}`
+      + `&token=${encodeURIComponent(authToken)}`;
+
+    const result = await apiFetch(url);
+
+    if (result.success) {
+      showToast('User created successfully.', 'success');
+      openAdminPanel(); // Refresh the list
+    } else {
+      showToast(result.message || 'Failed to create user.', 'error');
+    }
+  } catch (err) {
+    showToast(err.message, 'error');
   }
 }
 
-async function deleteUser(username) {
-  if (!confirm(`Delete user ${username}?`)) return;
-  
-  const response = await fetch(`${GAS_URL}?action=deleteUser&username=${encodeURIComponent(username)}&token=${encodeURIComponent(authToken)}`);
-  const result = await response.json();
-  
-  if (result.success) {
-    showToast('User deleted', 'success');
-    openAdminPanel();
-  } else {
-    showToast(result.message, 'error');
+async function adminDeleteUser(username) {
+  if (!confirm(`Delete user "${username}"? This cannot be undone.`)) return;
+
+  try {
+    const url = `${GAS_URL}?action=deleteUser`
+      + `&username=${encodeURIComponent(username)}`
+      + `&token=${encodeURIComponent(authToken)}`;
+
+    const result = await apiFetch(url);
+
+    if (result.success) {
+      showToast('User deleted.', 'success');
+      openAdminPanel();
+    } else {
+      showToast(result.message || 'Failed to delete user.', 'error');
+    }
+  } catch (err) {
+    showToast(err.message, 'error');
   }
 }
 
 // ══════════════════════════════════════════════════════════════
-//  UTILITY FUNCTIONS
+//  UTILITY
 // ══════════════════════════════════════════════════════════════
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
-  toast.className = 'toast-custom';
-  const icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'exclamation-circle' : 'info-circle');
-  toast.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+  toast.className = `toast-custom ${type}`;
+  const icon = type === 'success' ? 'check-circle'
+             : type === 'error'   ? 'exclamation-circle'
+             :                      'info-circle';
+  toast.innerHTML = `<i class="fas fa-${icon}" style="margin-right:6px;"></i>${escapeHtml(message)}`;
   container.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+  setTimeout(() => toast.remove(), 3500);
 }
 
 function toggleTheme() {
   document.body.classList.toggle('dark');
-  localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  const isDark = document.body.classList.contains('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
   const icon = document.getElementById('themeIcon');
-  icon.classList.toggle('fa-moon');
-  icon.classList.toggle('fa-sun');
+  if (isDark) {
+    icon.classList.replace('fa-moon', 'fa-sun');
+  } else {
+    icon.classList.replace('fa-sun', 'fa-moon');
+  }
 }
 
 function logout() {
-  fetch(`${GAS_URL}?action=logout&token=${encodeURIComponent(authToken)}`);
+  fetch(`${GAS_URL}?action=logout&token=${encodeURIComponent(authToken || '')}`).catch(() => {});
   localStorage.removeItem('authToken');
   localStorage.removeItem('user');
   window.location.href = 'login.html';
 }
 
 function escapeHtml(str) {
-  if (!str) return '';
-  return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+  if (!str && str !== 0) return '';
+  return String(str).replace(/[&<>"']/g, c =>
+    ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])
+  );
 }
 
 function escapeAttr(str) {
-  return String(str).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+  return String(str == null ? '' : str)
+    .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
 }
 
 // ══════════════════════════════════════════════════════════════
-//  START
+//  BOOT — wait for DOM + scripts to be ready
 // ══════════════════════════════════════════════════════════════
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'dark') document.body.classList.add('dark');
-
-initialize();
+document.addEventListener('DOMContentLoaded', function () {
+  initialize();
+});
 </script>
 </body>
 </html>
