@@ -104,6 +104,9 @@
       font-size: 0.85rem; color: var(--text-primary); width: 100%;
       font-family: inherit;
     }
+    .hierarchy-select:disabled {
+      opacity: 0.7; cursor: not-allowed;
+    }
 
     .btn-modern {
       background: linear-gradient(135deg, var(--accent), var(--accent-dark));
@@ -172,7 +175,6 @@
 </head>
 <body>
 
-<!-- Loading overlay (visible until initialize() completes) -->
 <div id="loadingOverlay">
   <div class="load-card">
     <i class="fas fa-spinner fa-spin fa-3x" style="color: var(--accent);"></i>
@@ -181,7 +183,6 @@
   </div>
 </div>
 
-<!-- ── Topbar ─────────────────────────────────────────────── -->
 <header class="topbar">
   <div class="logo">
     <div class="logo-icon"><i class="fas fa-school"></i></div>
@@ -211,10 +212,8 @@
   </div>
 </header>
 
-<!-- ── Main content ─────────────────────────────────────────── -->
 <main style="padding: 1.5rem; max-width: 1600px; margin: 0 auto;">
 
-  <!-- Archive quick buttons -->
   <div class="quick-buttons">
     <button class="quick-btn quick-btn-oot"        onclick="showArchiveModal('OOT')">
       <i class="fas fa-exchange-alt"></i> OOT Archive
@@ -230,7 +229,6 @@
     </button>
   </div>
 
-  <!-- Hierarchy filter card -->
   <div class="glass-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
     <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
       <i class="fas fa-layer-group" style="color:var(--accent);"></i>
@@ -270,7 +268,6 @@
     </div>
   </div>
 
-  <!-- Results area -->
   <div id="resultsArea">
     <div class="glass-card" style="padding: 3rem; text-align: center;">
       <i class="fas fa-filter" style="font-size:3rem; color:var(--text-muted);"></i>
@@ -280,10 +277,8 @@
 
 </main>
 
-<!-- Toast container -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- ── Action Modal ──────────────────────────────────────────── -->
 <div class="modal fade" id="actionModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content" style="background:var(--bg-card); color:var(--text-primary);">
@@ -338,7 +333,6 @@
   </div>
 </div>
 
-<!-- ── Archive Modal ─────────────────────────────────────────── -->
 <div class="modal fade" id="archiveModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content" style="background:var(--bg-card); color:var(--text-primary);">
@@ -351,7 +345,6 @@
   </div>
 </div>
 
-<!-- ── Admin Panel Modal ─────────────────────────────────────── -->
 <div class="modal fade" id="adminModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content" style="background:var(--bg-card); color:var(--text-primary);">
@@ -364,7 +357,6 @@
   </div>
 </div>
 
-<!-- ── External scripts (must load before inline JS) ────────── -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -378,7 +370,6 @@
 // ══════════════════════════════════════════════════════════════
 //  CONFIGURATION
 //  Replace GAS_URL with your deployed Google Apps Script Web App URL.
-//  In Apps Script: Deploy → Manage Deployments → copy "Web app URL"
 // ══════════════════════════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbwqxPxKOyQL_MUx9BA70SOcdObhuCXBqU9hKdrMRBh_JJgJUKgE_Pz_2yJtWSrnQZFQ/exec';
 
@@ -411,10 +402,6 @@ function setLoadingStatus(msg) {
 function showLoading()  { document.getElementById('loadingOverlay').style.display = 'flex'; }
 function hideLoading()  { document.getElementById('loadingOverlay').style.display = 'none'; }
 
-/**
- * Fetch wrapper: automatically redirects to login if the backend
- * returns needLogin:true (session expired mid-session).
- */
 async function apiFetch(url, options) {
   const response = await fetch(url, options || { redirect: 'follow' });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -450,7 +437,6 @@ async function checkAuth() {
       document.getElementById('adminPanelBtn').style.display = 'inline-flex';
     }
 
-    // Verify session is still alive on the server
     setLoadingStatus('Verifying session…');
     const data = await apiFetch(
       `${GAS_URL}?action=verifySession&token=${encodeURIComponent(authToken)}`
@@ -480,6 +466,34 @@ async function initialize() {
   try {
     setLoadingStatus('Loading hierarchy data…');
     await loadHierarchyLists();
+
+    // IMPROVEMENT 2: Pre-select hierarchy filters for restricted users
+    if (currentUser.role !== 'super_admin') {
+      if (currentUser.district) {
+        const sel = document.getElementById('districtSelect');
+        sel.value = currentUser.district;
+        sel.disabled = true;
+        onDistrictChange();
+      }
+      if (currentUser.wing) {
+        const sel = document.getElementById('wingSelect');
+        sel.value = currentUser.wing;
+        sel.disabled = true;
+        onWingChange();
+      }
+      if (currentUser.tehsil) {
+        const sel = document.getElementById('tehsilSelect');
+        sel.value = currentUser.tehsil;
+        sel.disabled = true;
+        onTehsilChange();
+      }
+      if (currentUser.markaz) {
+        const sel = document.getElementById('markazSelect');
+        sel.value = currentUser.markaz;
+        sel.disabled = true;
+        onMarkazChange();
+      }
+    }
 
     setLoadingStatus('Loading schools…');
     await loadSchoolsData();
@@ -578,7 +592,10 @@ function onDistrictChange() {
     return;
   }
 
-  wingEl.disabled = false;
+  // Prevent re-enabling if restricted by currentUser role setup
+  if (!wingEl.hasAttribute('data-restricted')) {
+     wingEl.disabled = false;
+  }
   const wings = (hierarchyData && hierarchyData.wingsByDistrict[district]) || [];
   wings.forEach(w => {
     const o = document.createElement('option');
@@ -673,7 +690,6 @@ function filterStaffByHierarchy() {
 //  TABLE RENDER
 // ══════════════════════════════════════════════════════════════
 function renderTable(headers, rows) {
-  // Destroy existing DataTable safely
   if (currentDataTable) {
     try { currentDataTable.destroy(); } catch(e) {}
     currentDataTable = null;
@@ -681,6 +697,8 @@ function renderTable(headers, rows) {
   if ($('#resultsTable').length) $('#resultsTable').remove();
 
   const area = document.getElementById('resultsArea');
+  // IMPROVEMENT 3: Hide Action button from viewers
+  const isViewer = currentUser && currentUser.role === 'viewer';
 
   if (!rows.length) {
     area.innerHTML = `
@@ -696,7 +714,10 @@ function renderTable(headers, rows) {
       <table id="resultsTable" class="table table-hover" style="width:100%;">
         <thead><tr>`;
   headers.forEach(h => html += `<th>${escapeHtml(String(h))}</th>`);
-  html += `<th>Action</th></tr></thead><tbody>`;
+  
+  if (!isViewer) html += `<th>Action</th>`;
+  
+  html += `</tr></thead><tbody>`;
 
   rows.forEach(row => {
     const pno    = escapeAttr(row[0]  || '');
@@ -706,16 +727,27 @@ function renderTable(headers, rows) {
 
     html += '<tr>';
     row.forEach(cell => html += `<td>${escapeHtml(cell == null ? '' : String(cell))}</td>`);
-    html += `<td>
-      <button class="action-btn"
-        onclick="openActionModal('${pno}','${name}','${gender}','${emis}')">
-        <i class="fas fa-bolt"></i> Action
-      </button></td>`;
+    
+    if (!isViewer) {
+      html += `<td>
+        <button class="action-btn"
+          onclick="openActionModal('${pno}','${name}','${gender}','${emis}')">
+          <i class="fas fa-bolt"></i> Action
+        </button></td>`;
+    }
     html += '</tr>';
   });
 
   html += '</tbody></table></div></div>';
   area.innerHTML = html;
+
+  // IMPROVEMENT 4: Dynamic export filename and hide action column if present
+  const dateStr = new Date().toISOString().split('T')[0];
+  const expD = currentHierarchy.district === 'all' ? 'AllDistricts' : currentHierarchy.district;
+  const expW = currentHierarchy.wing === 'all' ? 'AllWings' : currentHierarchy.wing;
+  const expT = currentHierarchy.tehsil === 'all' ? 'AllTehsils' : currentHierarchy.tehsil;
+  const expM = currentHierarchy.markaz === 'all' ? 'AllMarkaz' : currentHierarchy.markaz;
+  const exportFileName = `Staff_${expD}_${expW}_${expT}_${expM}_${dateStr}`.replace(/\s+/g, '');
 
   currentDataTable = $('#resultsTable').DataTable({
     scrollX: true,
@@ -723,7 +755,11 @@ function renderTable(headers, rows) {
     buttons: [{
       extend: 'excelHtml5',
       text: '<i class="fas fa-file-excel"></i> Export Excel',
-      className: 'btn-modern'
+      className: 'btn-modern',
+      filename: exportFileName,
+      exportOptions: {
+        columns: isViewer ? ':visible' : ':not(:last-child)'
+      }
     }],
     language: { search: '<i class="fas fa-search"></i> Quick Filter:' }
   });
@@ -786,7 +822,6 @@ function selectPill(el) {
   document.getElementById('notifSection').style.display  = (!isTransfer) ? 'block' : 'none';
   document.getElementById('schoolResult').style.display  = 'none';
   document.getElementById('newEmisInput').value = '';
-  // Transfers require school verification; non-transfers can confirm immediately
   document.getElementById('confirmBtn').disabled = isTransfer;
 }
 
@@ -802,7 +837,6 @@ function verifySchool() {
     return;
   }
 
-  // Gender validation
   const teacherGender = activeTeacher.gender === 'M' ? 'male' : 'female';
   const schoolGender  = (school.gender || '').toLowerCase();
 
@@ -817,7 +851,6 @@ function verifySchool() {
     return;
   }
 
-  // Transfer type validation
   const curTehsil   = activeTeacher.currentTehsil.toLowerCase().trim();
   const curDistrict = activeTeacher.currentDistrict.toLowerCase().trim();
   const newTehsil   = school.tehsil.toLowerCase().trim();
@@ -850,7 +883,6 @@ function verifySchool() {
     return;
   }
 
-  // All good
   verifiedSchoolData = {
     emis,
     name:     school.name,
@@ -867,47 +899,38 @@ function verifySchool() {
   document.getElementById('confirmBtn').disabled = false;
 }
 
+// IMPROVEMENT 5: Convert POST action to GET requests via URL params to avoid CORS/Redirect constraints.
 async function submitAction() {
   const confirmBtn = document.getElementById('confirmBtn');
   confirmBtn.disabled = true;
   confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing…';
 
   try {
-    let payload = { token: authToken };
+    let params = new URLSearchParams();
+    params.append('token', authToken);
 
     if (['same', 'oot', 'ood'].includes(activeType)) {
       if (!verifiedSchoolData) throw new Error('Please verify the school first.');
-      payload.action       = 'transfer';
-      payload.personalNo   = activeTeacher.pno;
-      payload.transferType = activeType;
-      payload.newEmis      = verifiedSchoolData.emis;
-      payload.newMarkaz    = verifiedSchoolData.markaz;
-      payload.newSchoolName= verifiedSchoolData.name;
-      payload.newTehsil    = verifiedSchoolData.tehsil;
-      payload.newDistrict  = verifiedSchoolData.district;
+      params.append('action', 'transfer');
+      params.append('personalNo', activeTeacher.pno);
+      params.append('transferType', activeType);
+      params.append('newEmis', verifiedSchoolData.emis);
+      params.append('newMarkaz', verifiedSchoolData.markaz);
+      params.append('newSchoolName', verifiedSchoolData.name);
+      params.append('newTehsil', verifiedSchoolData.tehsil);
+      params.append('newDistrict', verifiedSchoolData.district);
     } else {
       const notifNo = (document.getElementById('notifInput').value || '').trim();
       if (!notifNo) throw new Error('Please enter the notification number.');
-      payload.action         = 'retireOrResign';
-      payload.personalNo     = activeTeacher.pno;
-      payload.actionType     = activeType;
-      payload.notificationNo = notifNo;
+      params.append('action', 'retireOrResign');
+      params.append('personalNo', activeTeacher.pno);
+      params.append('actionType', activeType);
+      params.append('notificationNo', notifNo);
     }
 
-    const response = await fetch(GAS_URL, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload),
-      redirect:'follow'
-    });
-    const result = await response.json();
-
-    if (result.needLogin) {
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
-      window.location.href = 'login.html';
-      return;
-    }
+    // Now uses GET, safely navigating Apps Script Redirect constraints.
+    const url = `${GAS_URL}?${params.toString()}`;
+    const result = await apiFetch(url);
 
     if (result.success) {
       showToast(result.message, 'success');
@@ -937,7 +960,6 @@ async function showArchiveModal(type) {
   document.getElementById('archiveModalBody').innerHTML =
     '<div class="text-center p-5"><i class="fas fa-spinner fa-spin fa-2x"></i><p class="mt-2">Loading…</p></div>';
 
-  // Destroy any previous archive DataTable
   if ($.fn.DataTable.isDataTable('#archiveTable')) {
     $('#archiveTable').DataTable().destroy();
     $('#archiveTable').remove();
@@ -980,9 +1002,52 @@ async function showArchiveModal(type) {
 
 // ══════════════════════════════════════════════════════════════
 //  ADMIN PANEL
-//  Note: these functions are named adminCreateUser / adminDeleteUser
-//  to avoid collision with any future global `createUser` / `deleteUser`.
 // ══════════════════════════════════════════════════════════════
+// IMPROVEMENT 1: Handlers for cascading dropdowns inside Admin "Create User"
+function onAdminDistrictChange() {
+  const district = document.getElementById('newDistrict').value;
+  const wingEl = document.getElementById('newWing');
+  const tehsilEl = document.getElementById('newTehsil');
+  const markazEl = document.getElementById('newMarkaz');
+  
+  wingEl.innerHTML = '<option value="">All/None</option>';
+  tehsilEl.innerHTML = '<option value="">All/None</option>';
+  markazEl.innerHTML = '<option value="">All/None</option>';
+  
+  if (!district) return;
+  const wings = (hierarchyData && hierarchyData.wingsByDistrict[district]) || [];
+  wings.forEach(w => wingEl.appendChild(new Option(w, w)));
+}
+
+function onAdminWingChange() {
+  const district = document.getElementById('newDistrict').value;
+  const wing = document.getElementById('newWing').value;
+  const tehsilEl = document.getElementById('newTehsil');
+  const markazEl = document.getElementById('newMarkaz');
+  
+  tehsilEl.innerHTML = '<option value="">All/None</option>';
+  markazEl.innerHTML = '<option value="">All/None</option>';
+  
+  if (!wing) return;
+  const key = `${district}|${wing}`;
+  const tehsils = (hierarchyData && hierarchyData.tehsilsByWing[key]) || [];
+  tehsils.forEach(t => tehsilEl.appendChild(new Option(t, t)));
+}
+
+function onAdminTehsilChange() {
+  const district = document.getElementById('newDistrict').value;
+  const wing = document.getElementById('newWing').value;
+  const tehsil = document.getElementById('newTehsil').value;
+  const markazEl = document.getElementById('newMarkaz');
+  
+  markazEl.innerHTML = '<option value="">All/None</option>';
+  
+  if (!tehsil) return;
+  const key = `${district}|${wing}|${tehsil}`;
+  const markazs = (hierarchyData && hierarchyData.markazByTehsil[key]) || [];
+  markazs.forEach(m => markazEl.appendChild(new Option(m, m)));
+}
+
 async function openAdminPanel() {
   document.getElementById('adminModalBody').innerHTML =
     '<div class="text-center p-5"><i class="fas fa-spinner fa-spin fa-2x"></i><p class="mt-2">Loading users…</p></div>';
@@ -1025,19 +1090,27 @@ async function openAdminPanel() {
           </div>
           <div class="col-sm-2">
             <label class="form-label" style="font-size:0.75rem;">District</label>
-            <input type="text" id="newDistrict" class="form-control form-control-sm" placeholder="District (if applicable)">
+            <select id="newDistrict" class="form-select form-select-sm" onchange="onAdminDistrictChange()">
+              <option value="">All/None</option>
+            </select>
           </div>
           <div class="col-sm-2">
             <label class="form-label" style="font-size:0.75rem;">Wing</label>
-            <input type="text" id="newWing" class="form-control form-control-sm" placeholder="Wing">
+            <select id="newWing" class="form-select form-select-sm" onchange="onAdminWingChange()">
+              <option value="">All/None</option>
+            </select>
           </div>
           <div class="col-sm-1">
             <label class="form-label" style="font-size:0.75rem;">Tehsil</label>
-            <input type="text" id="newTehsil" class="form-control form-control-sm" placeholder="Tehsil">
+            <select id="newTehsil" class="form-select form-select-sm" onchange="onAdminTehsilChange()">
+              <option value="">All/None</option>
+            </select>
           </div>
           <div class="col-sm-1">
             <label class="form-label" style="font-size:0.75rem;">Markaz</label>
-            <input type="text" id="newMarkaz" class="form-control form-control-sm" placeholder="Markaz">
+            <select id="newMarkaz" class="form-select form-select-sm">
+              <option value="">All/None</option>
+            </select>
           </div>
           <div class="col-sm-12 mt-2">
             <button class="btn-modern" onclick="adminCreateUser()">
@@ -1078,6 +1151,12 @@ async function openAdminPanel() {
     html += `</tbody></table></div>`;
     document.getElementById('adminModalBody').innerHTML = html;
 
+    // Populate initial District dropdown 
+    const dSelect = document.getElementById('newDistrict');
+    (hierarchyData.districts || []).forEach(d => {
+        dSelect.appendChild(new Option(d, d));
+    });
+
   } catch (err) {
     document.getElementById('adminModalBody').innerHTML =
       `<div class="alert alert-danger">Error: ${escapeHtml(err.message)}</div>`;
@@ -1088,10 +1167,10 @@ async function adminCreateUser() {
   const username = (document.getElementById('newUsername').value || '').trim();
   const password =  document.getElementById('newPassword').value || '';
   const role     =  document.getElementById('newRole').value;
-  const district = (document.getElementById('newDistrict').value || '').trim();
-  const wing     = (document.getElementById('newWing').value     || '').trim();
-  const tehsil   = (document.getElementById('newTehsil').value   || '').trim();
-  const markaz   = (document.getElementById('newMarkaz').value   || '').trim();
+  const district =  document.getElementById('newDistrict').value || '';
+  const wing     =  document.getElementById('newWing').value     || '';
+  const tehsil   =  document.getElementById('newTehsil').value   || '';
+  const markaz   =  document.getElementById('newMarkaz').value   || '';
 
   if (!username || !password) {
     showToast('Username and password are required.', 'error');
