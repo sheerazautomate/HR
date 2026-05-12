@@ -2,20 +2,16 @@
 <html lang="en">
 <head>
   <link rel="icon" type="image/png" href="favicon.png">
-   <!-- Open Graph Meta Tags (WhatsApp, Facebook, LinkedIn) -->
   <meta property="og:title" content="Staff Statement Dashboard">
   <meta property="og:description" content="View and Export Staff Data, Use Transfer Out, Retire or Resign features for staff management.">
   <meta property="og:image" content="https://sheerazautomate.github.io/HR/preview-image.png">
   <meta property="og:url" content="https://sheerazautomate.github.io/HR/">
   <meta property="og:type" content="website">
-  <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Staff Statement Dashboard">
   <meta name="twitter:description" content="View and Export Staff Data, Use Transfer Out, Retire or Resign features for staff management.">
   <meta name="twitter:image" content="https://sheerazautomate.github.io/HR/preview-image.png">
-  
-  <!-- General Meta Tags -->
-  <meta name="description" content="Comprehensive enrollment monitoring dashboard for Punjab schools with real-time analytics and insights.">
+  <meta name="description" content="Comprehensive staff monitoring dashboard for Punjab schools with real-time analytics and insights.">
   <meta name="theme-color" content="#0d6efd">
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -27,7 +23,6 @@
   <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet"/>
 
   <style>
-    /* ══ TOKENS ══════════════════════════════════════════════ */
     :root {
       --ink:        #111827;
       --ink-2:      #374151;
@@ -58,7 +53,6 @@
       --trans:      .18s ease;
     }
 
-    /* ══ RESET & BASE ════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
@@ -69,7 +63,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ══ TOPBAR ══════════════════════════════════════════════ */
     .topbar {
       background: var(--ink);
       padding: 0 20px;
@@ -127,18 +120,13 @@
     }
     .btn-refresh-cache:hover { background: rgba(255,255,255,.06); color: #fff; }
 
-    /* ══ MAIN WRAP ═══════════════════════════════════════════ */
     .main { padding: 20px 16px 70px; max-width: 1400px; margin: 0 auto; }
-
-    /* ══ SECTION LABELS ══════════════════════════════════════ */
     .section-label {
       font-family: var(--font-h);
       font-size: 11px; font-weight: 700;
       text-transform: uppercase; letter-spacing: 1.2px;
       color: var(--ink-3); margin-bottom: 10px;
     }
-
-    /* ══ SEARCH CARD ═════════════════════════════════════════ */
     .search-card {
       background: var(--card);
       border-radius: var(--radius);
@@ -147,8 +135,6 @@
       margin-bottom: 18px;
       border: 1px solid var(--border);
     }
-
-    /* ══ FORM CONTROLS ═══════════════════════════════════════ */
     .form-label {
       font-size: 11px; font-weight: 700;
       text-transform: uppercase; letter-spacing: .7px;
@@ -169,11 +155,8 @@
       box-shadow: 0 0 0 3px rgba(193,68,14,.11);
       outline: none;
     }
-    .form-control::placeholder { color: #b0a89e; }
-
-    /* ══ SEARCH BUTTON ═══════════════════════════════════════ */
     .btn-search {
-      width: 100%; background: var(--accent);
+      width: 100%; background: var(--teal);
       color: #fff; border: 0;
       border-radius: var(--radius-sm);
       padding: 11px 20px;
@@ -183,11 +166,10 @@
       transition: background var(--trans), transform .1s;
       display: flex; align-items: center; justify-content: center; gap: 7px;
     }
-    .btn-search:hover    { background: var(--accent-d); }
+    .btn-search:hover    { background: #0a5c72; }
     .btn-search:active   { transform: scale(.98); }
     .btn-search:disabled { background: #ccc; cursor: not-allowed; }
 
-    /* ══ RESULTS CARD ════════════════════════════════════════ */
     .results-card {
       background: var(--card);
       border-radius: var(--radius);
@@ -216,11 +198,7 @@
       font-family: var(--font-h);
       font-size: 13px; font-weight: 700;
     }
-    .results-hint {
-      font-size: 12px; color: var(--ink-3); margin-left: auto;
-    }
 
-    /* ══ DATATABLES OVERRIDES ════════════════════════════════ */
     table.dataTable { width: 100% !important; }
     table.dataTable thead th {
       background: var(--ink) !important;
@@ -231,31 +209,23 @@
       border: 0 !important; padding: 11px 10px;
       white-space: nowrap;
     }
-    table.dataTable thead th:first-child { border-radius: 0; }
     table.dataTable tbody tr { border-bottom: 1px solid #f0ede8; transition: background var(--trans); }
     table.dataTable tbody td { font-size: 13px; padding: 9px 10px; vertical-align: middle; }
     table.dataTable tbody tr:hover td { background: var(--accent-lt) !important; }
-    .dataTables_wrapper .dataTables_filter input {
-      border: 1.5px solid var(--border) !important;
-      border-radius: var(--radius-sm) !important;
-      padding: 7px 11px !important; font-size: 13px;
-    }
+    .dataTables_wrapper .dataTables_filter input,
     .dataTables_wrapper .dataTables_length select {
       border: 1.5px solid var(--border) !important;
       border-radius: var(--radius-sm) !important;
+      padding: 7px 11px !important;
     }
-    .dataTables_wrapper .dataTables_info,
-    .dataTables_wrapper .dataTables_paginate { font-size: 12px; }
     .dt-buttons { margin-bottom: 10px !important; }
     .btn.buttons-excel {
       background: var(--green) !important; color: #fff !important;
       border: 0 !important; border-radius: 8px !important;
       font-size: 12px !important; font-weight: 700 !important;
-      padding: 7px 16px !important; font-family: var(--font-h) !important;
-      letter-spacing: .3px !important;
+      padding: 7px 16px !important;
     }
 
-    /* ══ ACTION BUTTON IN TABLE ══════════════════════════════ */
     .btn-action-row {
       background: var(--ink);
       color: #fff; border: 0;
@@ -263,20 +233,15 @@
       padding: 5px 13px;
       font-size: 11px; font-weight: 700;
       font-family: var(--font-h);
-      letter-spacing: .4px;
       cursor: pointer;
-      transition: background var(--trans), transform .1s;
-      white-space: nowrap;
+      transition: background var(--trans);
     }
-    .btn-action-row:hover  { background: var(--accent); }
-    .btn-action-row:active { transform: scale(.95); }
+    .btn-action-row:hover { background: var(--accent); }
 
-    /* ══ MODAL ═══════════════════════════════════════════════ */
     .modal-content {
       border: 0;
       border-radius: 18px;
       box-shadow: var(--shadow-lg);
-      font-family: var(--font-b);
       overflow: hidden;
     }
     .modal-header {
@@ -288,25 +253,27 @@
       font-weight: 700; font-size: 16px;
     }
     .btn-close { filter: invert(1) opacity(.7); }
-    .btn-close:hover { filter: invert(1) opacity(1); }
     .modal-body   { padding: 20px 22px; }
     .modal-footer { padding: 0 22px 20px; border: 0; gap: 10px; }
 
-    /* Teacher info strip */
     .teacher-strip {
       background: var(--accent-lt);
       border: 1.5px solid rgba(193,68,14,.2);
       border-radius: 10px;
       padding: 11px 14px;
       margin-bottom: 18px;
-      display: flex; align-items: center; gap: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
     .teacher-strip-icon {
       width: 38px; height: 38px;
       background: var(--accent);
       border-radius: 9px;
-      display: grid; place-items: center;
-      font-size: 16px; flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      flex-shrink: 0;
     }
     .teacher-strip-name {
       font-family: var(--font-h);
@@ -318,7 +285,6 @@
       margin-top: 2px;
     }
 
-    /* Action type pills */
     .pill-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -333,83 +299,59 @@
       cursor: pointer;
       transition: all var(--trans);
       background: #fff;
-      font-family: var(--font-b);
     }
     .action-pill .pill-icon  { font-size: 18px; display: block; margin-bottom: 4px; }
-    .action-pill .pill-label { font-size: 11px; font-weight: 700; letter-spacing: .3px; display: block; }
+    .action-pill .pill-label { font-size: 11px; font-weight: 700; display: block; }
     .action-pill .pill-sub   { font-size: 10px; color: var(--ink-3); display: block; margin-top: 1px; }
     .action-pill:hover { border-color: var(--accent); background: var(--accent-lt); }
-
     .action-pill.active-same       { border-color: var(--accent); background: var(--accent-lt); color: var(--accent); }
-    .action-pill.active-same .pill-sub { color: var(--accent); }
     .action-pill.active-oot        { border-color: var(--teal);   background: var(--teal-lt);   color: var(--teal); }
-    .action-pill.active-oot .pill-sub  { color: var(--teal); }
     .action-pill.active-ood        { border-color: #7c3aed;        background: #f5f3ff;           color: #7c3aed; }
-    .action-pill.active-ood .pill-sub  { color: #7c3aed; }
     .action-pill.active-retirement { border-color: var(--amber);  background: var(--amber-lt);  color: var(--amber); }
-    .action-pill.active-retirement .pill-sub { color: var(--amber); }
     .action-pill.active-resignation{ border-color: var(--slate);  background: var(--slate-lt);  color: var(--slate); }
-    .action-pill.active-resignation .pill-sub { color: var(--slate); }
 
-    /* Divider */
-    .modal-divider {
-      border: 0; border-top: 1px solid var(--border);
-      margin: 2px 0 16px;
-    }
-
-    /* EMIS input + verify */
+    .modal-divider { border: 0; border-top: 1px solid var(--border); margin: 2px 0 16px; }
     .emis-row { display: flex; gap: 8px; }
     .emis-row .form-control { flex: 1; }
     .btn-verify {
       background: var(--teal); color: #fff; border: 0;
       border-radius: var(--radius-sm);
       padding: 10px 15px; font-size: 13px; font-weight: 700;
-      cursor: pointer; white-space: nowrap;
-      transition: opacity var(--trans);
-      font-family: var(--font-h);
+      cursor: pointer;
+      white-space: nowrap;
     }
-    .btn-verify:hover    { opacity: .85; }
-    .btn-verify:disabled { background: #ccc; cursor: not-allowed; }
+    .btn-verify:hover { opacity: .85; }
 
-    /* School result card */
     .school-result {
       border-radius: 9px; padding: 10px 13px;
       margin-top: 9px; font-size: 13px;
-      display: none; /* shown via JS */
+      display: none;
       border: 1.5px solid;
     }
-    .school-result.ok  {
-      background: var(--green-lt); border-color: rgba(20,83,45,.2); color: var(--green);
-    }
-    .school-result.err {
-      background: var(--red-lt); border-color: rgba(153,27,27,.2); color: var(--red);
-    }
-    .school-result.warn {
-      background: var(--amber-lt); border-color: rgba(146,64,14,.2); color: var(--amber);
-    }
+    .school-result.ok  { background: var(--green-lt); border-color: rgba(20,83,45,.2); color: var(--green); }
+    .school-result.err { background: var(--red-lt); border-color: rgba(153,27,27,.2); color: var(--red); }
+    .school-result.warn { background: var(--amber-lt); border-color: rgba(146,64,14,.2); color: var(--amber); }
     .school-result .sr-name   { font-weight: 700; font-size: 14px; margin-bottom: 3px; }
-    .school-result .sr-detail { font-size: 12px; opacity: .85; line-height: 1.6; }
+    .school-result .sr-detail { font-size: 12px; line-height: 1.6; }
 
-    /* Confirm button */
     .btn-confirm {
       background: var(--accent); color: #fff; border: 0;
       border-radius: var(--radius-sm);
       padding: 11px 24px;
       font-family: var(--font-h); font-weight: 700; font-size: 14px;
-      cursor: pointer; transition: background var(--trans);
+      cursor: pointer;
     }
-    .btn-confirm:hover    { background: var(--accent-d); }
+    .btn-confirm:hover { background: var(--accent-d); }
     .btn-confirm:disabled { background: #ccc; cursor: not-allowed; }
     .btn-cancel-modal {
       background: transparent; color: var(--ink-2);
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
       padding: 10px 18px; font-size: 14px; font-weight: 500;
-      cursor: pointer; transition: border-color var(--trans);
+      cursor: pointer;
     }
     .btn-cancel-modal:hover { border-color: var(--ink); }
 
-    /* ══ SPINNER ═════════════════════════════════════════════ */
     .spinner-wrap {
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
@@ -422,13 +364,8 @@
       border-radius: 50%;
       animation: spin .7s linear infinite;
     }
-    .spinner-text {
-      font-family: var(--font-h); font-size: 13px;
-      color: var(--ink-3); letter-spacing: .3px;
-    }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ══ TOAST ═══════════════════════════════════════════════ */
     #toasts {
       position: fixed; bottom: 18px; right: 16px;
       z-index: 9999;
@@ -438,7 +375,7 @@
     .toast-item {
       padding: 12px 16px; border-radius: 11px;
       font-size: 13px; font-weight: 600; color: #fff;
-      box-shadow: var(--shadow-lg); line-height: 1.4;
+      box-shadow: var(--shadow-lg);
       animation: toastIn .28s ease, toastOut .3s ease 3.8s forwards;
     }
     .toast-item.success { background: #15803d; }
@@ -448,14 +385,12 @@
     @keyframes toastIn  { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
     @keyframes toastOut { from{opacity:1} to{opacity:0;transform:translateY(6px)} }
 
-    /* ══ CACHE LOADING OVERLAY ═══════════════════════════════ */
     #cacheOverlay {
       position: fixed; inset: 0;
       background: rgba(17,24,39,.55);
       backdrop-filter: blur(3px);
       z-index: 200;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 16px;
+      display: flex; align-items: center; justify-content: center;
     }
     #cacheOverlay.hidden { display: none; }
     .cache-progress-box {
@@ -464,10 +399,7 @@
       text-align: center; box-shadow: var(--shadow-lg);
       min-width: 280px;
     }
-    .cache-progress-box h3 {
-      font-family: var(--font-h); font-size: 16px; font-weight: 700;
-      margin-bottom: 6px;
-    }
+    .cache-progress-box h3 { font-family: var(--font-h); font-size: 16px; margin-bottom: 6px; }
     .cache-progress-box p { font-size: 13px; color: var(--ink-3); margin-bottom: 18px; }
     .progress-bar-wrap {
       background: var(--bg-2); border-radius: 20px;
@@ -479,26 +411,22 @@
       transition: width .4s ease;
     }
 
-    /* ══ RESPONSIVE ══════════════════════════════════════════ */
     @media (max-width: 576px) {
-      .topbar       { height: 52px; padding: 0 14px; }
-      .main         { padding: 14px 10px 70px; }
-      .search-card  { padding: 14px; }
-      .modal-body   { padding: 16px; }
-      .modal-footer { padding: 0 16px 16px; }
-      .results-hint { display: none; }
-      .pill-grid    { grid-template-columns: repeat(3, 1fr); }
+      .topbar { height: 52px; padding: 0 14px; }
+      .main { padding: 14px 10px 70px; }
+      .search-card { padding: 14px; }
+      .modal-body { padding: 16px; }
+      .pill-grid { grid-template-columns: repeat(3, 1fr); }
     }
   </style>
 </head>
 <body>
 
-<!-- ══ CACHE LOADING OVERLAY ════════════════════════════════ -->
 <div id="cacheOverlay">
   <div class="cache-progress-box">
     <div style="font-size:28px;margin-bottom:10px;">🏫</div>
     <h3>Loading Schools Data</h3>
-    <p>Downloading 38K+ schools for offline use.<br>This only happens once.</p>
+    <p>Downloading schools for offline use.<br>This only happens once.</p>
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="cacheProgressBar"></div>
     </div>
@@ -506,7 +434,6 @@
   </div>
 </div>
 
-<!-- ══ TOPBAR ════════════════════════════════════════════════ -->
 <header class="topbar">
   <div class="topbar-logo">S</div>
   <div class="topbar-title">
@@ -515,99 +442,67 @@
   </div>
   <div class="topbar-right">
     <span class="cache-badge loading" id="cacheBadge">⟳ Schools loading…</span>
-    <button class="btn-refresh-cache" onclick="refreshSchoolCache()" title="Force reload schools data">↺ Refresh</button>
+    <button class="btn-refresh-cache" onclick="refreshSchoolCache()">↺ Refresh</button>
   </div>
 </header>
 
-<!-- ══ MAIN ══════════════════════════════════════════════════ -->
 <div class="main">
 
   <!-- Hierarchy Filter Card -->
   <div class="search-card">
-    <div class="section-label">📍 Hierarchy Filter</div>
+    <div class="section-label">📍 Location Hierarchy (District → Wing → Tehsil → Markaz)</div>
     <div class="row g-3 align-items-end">
-      
+      <div class="col-12 col-md-3">
+        <label class="form-label">District</label>
+        <select id="districtSelect" class="form-select" onchange="onDistrictChange()">
+          <option value="all">All Districts</option>
+        </select>
+      </div>
       <div class="col-12 col-md-3">
         <label class="form-label">Wing</label>
-        <select id="wingSelect" class="form-select" onchange="onWingChange()">
+        <select id="wingSelect" class="form-select" onchange="onWingChange()" disabled>
           <option value="all">All Wings</option>
         </select>
       </div>
-      
       <div class="col-12 col-md-3">
         <label class="form-label">Tehsil</label>
         <select id="tehsilSelect" class="form-select" onchange="onTehsilChange()" disabled>
           <option value="all">All Tehsils</option>
         </select>
       </div>
-      
       <div class="col-12 col-md-3">
         <label class="form-label">Markaz</label>
         <select id="markazSelect" class="form-select" onchange="onMarkazChange()" disabled>
           <option value="all">All Markaz</option>
         </select>
       </div>
-      
-      <div class="col-12 col-md-3">
-        <button class="btn-search" onclick="applyHierarchyFilter()" style="background: var(--teal);">
-          <span>📊 Apply Filter</span>
-        </button>
-      </div>
-      
     </div>
-  </div>
-
-  <!-- Staff Search Card (within hierarchy scope) -->
-  <div class="search-card">
-    <div class="section-label">🔍 Staff Search (within selected hierarchy)</div>
-    <div class="row g-3 align-items-end">
-      
-      <div class="col-12 col-sm-6 col-md-3">
-        <label class="form-label">Search By</label>
-        <select id="searchType" class="form-select">
-          <option value="personalNo">Personal No.</option>
-          <option value="cnic">CNIC</option>
-          <option value="emis">School EMIS Code</option>
-        </select>
-      </div>
-      
-      <div class="col-12 col-sm-6 col-md-7">
-        <label class="form-label">Value (exact match)</label>
-        <input type="text" id="searchValue" class="form-control" 
-               placeholder="e.g. 3054123 or 32301-1234567-1"
-               onkeydown="if(event.key==='Enter') performHierarchySearch()" />
-      </div>
-      
-      <div class="col-12 col-md-2">
-        <button class="btn-search" id="searchBtn" onclick="performHierarchySearch()">
-          <span id="searchBtnText">🔎 Search</span>
+    <div class="row mt-3">
+      <div class="col-12">
+        <button class="btn-search" onclick="applyHierarchyFilter()">
+          <span>📊 Show Staff</span>
         </button>
       </div>
-      
     </div>
     <div class="mt-2 small text-muted">
-      ℹ️ Showing staff from: <span id="hierarchyScopeBadge">All Wings</span>
+      ℹ️ Showing staff from: <span id="hierarchyScopeBadge">All Districts</span>
     </div>
   </div>
 
   <!-- Results -->
   <div id="resultsArea"></div>
 
-</div><!-- /main -->
+</div>
 
-<!-- ══ ACTION MODAL ══════════════════════════════════════════ -->
+<!-- Action Modal -->
 <div class="modal fade" id="actionModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
-
       <div class="modal-header">
         <h5 class="modal-title">Teacher Action</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-
       <div class="modal-body">
-
-        <!-- Teacher strip -->
         <div class="teacher-strip">
           <div class="teacher-strip-icon">👤</div>
           <div>
@@ -616,7 +511,6 @@
           </div>
         </div>
 
-        <!-- Action type pills -->
         <label class="form-label">Select Action</label>
         <div class="pill-grid">
           <div class="action-pill" data-type="same" onclick="selectPill(this)">
@@ -648,18 +542,14 @@
 
         <hr class="modal-divider"/>
 
-        <!-- EMIS section (same / oot / ood) -->
         <div id="emisSection" class="d-none">
           <label class="form-label">New School EMIS Code</label>
           <div class="emis-row">
-            <input type="text" id="newEmisInput" class="form-control"
-                   placeholder="e.g. 32220167"
-                   oninput="onEmisInput()"
-                   onkeydown="if(event.key==='Enter') verifySchool()" />
+            <input type="text" id="newEmisInput" class="form-control" placeholder="e.g. 32220167" oninput="onEmisInput()" onkeydown="if(event.key==='Enter') verifySchool()" />
             <button class="btn-verify" id="verifyBtn" onclick="verifySchool()">Verify</button>
           </div>
           <div class="school-result" id="schoolResult">
-            <div class="sr-name"   id="srName"></div>
+            <div class="sr-name" id="srName"></div>
             <div class="sr-detail" id="srDetail"></div>
           </div>
           <input type="hidden" id="verifiedMarkaz"/>
@@ -668,31 +558,21 @@
           <input type="hidden" id="verifiedDistrict"/>
         </div>
 
-        <!-- Notification section (retirement / resignation) -->
         <div id="notifSection" class="d-none">
           <label class="form-label">Notification No.</label>
-          <input type="text" id="notifInput" class="form-control"
-                 placeholder="e.g. SO(E-I)3-10/2024"
-                 oninput="onNotifInput()"/>
+          <input type="text" id="notifInput" class="form-control" placeholder="e.g. SO(E-I)3-10/2024" oninput="onNotifInput()"/>
         </div>
-
-      </div><!-- /modal-body -->
-
+      </div>
       <div class="modal-footer">
         <button class="btn-cancel-modal" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn-confirm" id="confirmBtn" onclick="submitAction()" disabled>
-          Confirm Action
-        </button>
+        <button class="btn-confirm" id="confirmBtn" onclick="submitAction()" disabled>Confirm Action</button>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- ══ TOASTS ════════════════════════════════════════════════ -->
 <div id="toasts"></div>
 
-<!-- ══ SCRIPTS ═══════════════════════════════════════════════ -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -708,21 +588,17 @@
 // ══════════════════════════════════════════════════════════════
 //  CONFIG
 // ══════════════════════════════════════════════════════════════
-const GAS_URL        = 'https://script.google.com/macros/s/AKfycbwqxPxKOyQL_MUx9BA70SOcdObhuCXBqU9hKdrMRBh_JJgJUKgE_Pz_2yJtWSrnQZFQ/exec';
-const SCHOOLS_CACHE_KEY = 'staffDash_schoolsCache_v2';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwqxPxKOyQL_MUx9BA70SOcdObhuCXBqU9hKdrMRBh_JJgJUKgE_Pz_2yJtWSrnQZFQ/exec';
+const SCHOOLS_CACHE_KEY = 'staffDash_schoolsCache_v3';
 
-// ── In-memory schools map: emis → school object ───────────────
-let schoolsMap = {};    // { "32220167": { name, markaz, tehsil, district, gender, area } }
+let schoolsMap = {};
 let schoolsCached = false;
-
-// ── Current teacher being actioned ───────────────────────────
-let activePno     = '';
-let activeTeacher = {};   // { name, gender, currentEmis, currentTehsil, currentDistrict }
-let activeType    = '';   // same | oot | ood | retirement | resignation
+let activePno = '';
+let activeTeacher = {};
+let activeType = '';
 let schoolVerified = false;
-
-// ── Hierarchy state ──────────────────────────────────────────
 let currentHierarchy = {
+  district: 'all',
   wing: 'all',
   tehsil: 'all',
   markaz: 'all'
@@ -736,32 +612,27 @@ document.addEventListener('DOMContentLoaded', () => {
   loadHierarchyOptions();
 });
 
-// ══════════════════════════════════════════════════════════════
-//  API HELPERS
-// ══════════════════════════════════════════════════════════════
 async function gasGet(params) {
-  const qs  = new URLSearchParams(params).toString();
+  const qs = new URLSearchParams(params).toString();
   const res = await fetch(`${GAS_URL}?${qs}`);
   return res.json();
 }
 
 async function gasPost(payload) {
   const res = await fetch(GAS_URL, {
-    method:   'POST',
-    headers:  { 'Content-Type': 'text/plain' },
-    body:     JSON.stringify(payload),
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(payload),
     redirect: 'follow',
   });
   return res.json();
 }
 
 // ══════════════════════════════════════════════════════════════
-//  SCHOOLS CACHE  (localStorage, indefinite)
+//  SCHOOLS CACHE
 // ══════════════════════════════════════════════════════════════
 async function initSchoolsCache() {
   setCacheBadge('loading', '⟳ Schools loading…');
-
-  // Try loading from localStorage first
   try {
     const raw = localStorage.getItem(SCHOOLS_CACHE_KEY);
     if (raw) {
@@ -773,9 +644,7 @@ async function initSchoolsCache() {
         return;
       }
     }
-  } catch (e) { /* cache corrupt, re-fetch */ }
-
-  // Fetch from GAS
+  } catch (e) {}
   await fetchAndCacheSchools();
 }
 
@@ -785,21 +654,17 @@ async function fetchAndCacheSchools() {
     showOverlay('Connecting to server…', 10);
     const data = await gasGet({ action: 'getAllSchools' });
     showOverlay('Processing data…', 60);
-
     if (!data.success) {
       setCacheBadge('loading', '✗ Schools failed');
       hideOverlay();
       toast('Could not load schools data: ' + (data.message || 'Unknown error'), 'error');
       return;
     }
-
     showOverlay('Saving to local storage…', 85);
     buildSchoolsMap(data.data);
-
     try {
       localStorage.setItem(SCHOOLS_CACHE_KEY, JSON.stringify({ data: data.data, ts: Date.now() }));
-    } catch (e) { /* storage full – just use in-memory */ }
-
+    } catch (e) {}
     showOverlay('Done!', 100);
     setTimeout(hideOverlay, 400);
     setCacheBadge('loaded', `✓ ${data.data.length.toLocaleString()} schools cached`);
@@ -812,12 +677,11 @@ async function fetchAndCacheSchools() {
 
 function buildSchoolsMap(rows) {
   schoolsMap = {};
-  // rows: [emis, schoolName, markaz, tehsil, district, genderType, area]
+  // rows: [emis, schoolName, markaz, tehsil, district, genderType, area, wing]
   rows.forEach(r => {
     schoolsMap[r[0].toString().trim()] = {
-      name:    r[1], markaz:  r[2],
-      tehsil:  r[3], district: r[4],
-      gender:  r[5], area:     r[6],
+      name: r[1], markaz: r[2], tehsil: r[3],
+      district: r[4], gender: r[5], area: r[6], wing: r[7] || ''
     };
   });
   schoolsCached = true;
@@ -835,7 +699,7 @@ function showOverlay(msg, pct) {
   if (overlay) {
     overlay.classList.remove('hidden');
     document.getElementById('cacheProgressText').textContent = msg;
-    document.getElementById('cacheProgressBar').style.width  = pct + '%';
+    document.getElementById('cacheProgressBar').style.width = pct + '%';
   }
 }
 function hideOverlay() {
@@ -855,10 +719,52 @@ function setCacheBadge(state, text) {
 // ══════════════════════════════════════════════════════════════
 async function loadHierarchyOptions() {
   try {
-    const wingsRes = await gasGet({ action: 'getWingsList' });
+    const districtsRes = await gasGet({ action: 'getDistrictsList' });
+    if (districtsRes.success) {
+      const districtSelect = document.getElementById('districtSelect');
+      districtSelect.innerHTML = '<option value="all">All Districts</option>';
+      districtsRes.data.forEach(district => {
+        const opt = document.createElement('option');
+        opt.value = opt.textContent = district;
+        districtSelect.appendChild(opt);
+      });
+    }
+  } catch (e) {
+    console.error('Failed to load districts:', e);
+  }
+}
+
+async function onDistrictChange() {
+  const district = document.getElementById('districtSelect').value;
+  currentHierarchy.district = district;
+  currentHierarchy.wing = 'all';
+  currentHierarchy.tehsil = 'all';
+  currentHierarchy.markaz = 'all';
+  
+  const wingSelect = document.getElementById('wingSelect');
+  const tehsilSelect = document.getElementById('tehsilSelect');
+  const markazSelect = document.getElementById('markazSelect');
+  
+  if (district === 'all') {
+    wingSelect.innerHTML = '<option value="all">All Wings</option>';
+    tehsilSelect.innerHTML = '<option value="all">All Tehsils</option>';
+    markazSelect.innerHTML = '<option value="all">All Markaz</option>';
+    wingSelect.disabled = true;
+    tehsilSelect.disabled = true;
+    markazSelect.disabled = true;
+    return;
+  }
+  
+  wingSelect.disabled = false;
+  wingSelect.innerHTML = '<option value="all">All Wings</option>';
+  tehsilSelect.innerHTML = '<option value="all">All Tehsils</option>';
+  markazSelect.innerHTML = '<option value="all">All Markaz</option>';
+  tehsilSelect.disabled = true;
+  markazSelect.disabled = true;
+  
+  try {
+    const wingsRes = await gasGet({ action: 'getWingsByDistrict', district: district });
     if (wingsRes.success) {
-      const wingSelect = document.getElementById('wingSelect');
-      wingSelect.innerHTML = '<option value="all">All Wings</option>';
       wingsRes.data.forEach(wing => {
         const opt = document.createElement('option');
         opt.value = opt.textContent = wing;
@@ -866,11 +772,12 @@ async function loadHierarchyOptions() {
       });
     }
   } catch (e) {
-    console.error('Failed to load hierarchy:', e);
+    console.error('Failed to load wings:', e);
   }
 }
 
 async function onWingChange() {
+  const district = document.getElementById('districtSelect').value;
   const wing = document.getElementById('wingSelect').value;
   currentHierarchy.wing = wing;
   currentHierarchy.tehsil = 'all';
@@ -887,14 +794,13 @@ async function onWingChange() {
     return;
   }
   
-  // Load Tehsils for this Wing
   tehsilSelect.disabled = false;
   tehsilSelect.innerHTML = '<option value="all">All Tehsils</option>';
   markazSelect.innerHTML = '<option value="all">All Markaz</option>';
   markazSelect.disabled = true;
   
   try {
-    const tehsilsRes = await gasGet({ action: 'getTehsilsByWing', wing: wing });
+    const tehsilsRes = await gasGet({ action: 'getTehsilsByWing', district: district, wing: wing });
     if (tehsilsRes.success) {
       tehsilsRes.data.forEach(tehsil => {
         const opt = document.createElement('option');
@@ -908,6 +814,7 @@ async function onWingChange() {
 }
 
 async function onTehsilChange() {
+  const district = document.getElementById('districtSelect').value;
   const wing = document.getElementById('wingSelect').value;
   const tehsil = document.getElementById('tehsilSelect').value;
   currentHierarchy.tehsil = tehsil;
@@ -921,12 +828,11 @@ async function onTehsilChange() {
     return;
   }
   
-  // Load Markaz for this Wing + Tehsil
   markazSelect.disabled = false;
   markazSelect.innerHTML = '<option value="all">All Markaz</option>';
   
   try {
-    const markazRes = await gasGet({ action: 'getMarkazByWingAndTehsil', wing: wing, tehsil: tehsil });
+    const markazRes = await gasGet({ action: 'getMarkazByTehsil', district: district, wing: wing, tehsil: tehsil });
     if (markazRes.success) {
       markazRes.data.forEach(markaz => {
         const opt = document.createElement('option');
@@ -944,27 +850,24 @@ function onMarkazChange() {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  APPLY HIERARCHY FILTER (show all staff in scope)
+//  APPLY HIERARCHY FILTER
 // ══════════════════════════════════════════════════════════════
 async function applyHierarchyFilter() {
+  const district = document.getElementById('districtSelect').value;
   const wing = document.getElementById('wingSelect').value;
   const tehsil = document.getElementById('tehsilSelect').value;
   const markaz = document.getElementById('markazSelect').value;
   
-  currentHierarchy = { wing, tehsil, markaz };
+  currentHierarchy = { district, wing, tehsil, markaz };
   
-  // Update badge
   let badgeText = '';
-  if (wing !== 'all') badgeText += `Wing: ${wing}`;
+  if (district !== 'all') badgeText += `District: ${district}`;
+  if (wing !== 'all') badgeText += ` → Wing: ${wing}`;
   if (tehsil !== 'all') badgeText += ` → Tehsil: ${tehsil}`;
   if (markaz !== 'all') badgeText += ` → Markaz: ${markaz}`;
-  if (!badgeText) badgeText = 'All Wings';
+  if (!badgeText) badgeText = 'All Districts';
   document.getElementById('hierarchyScopeBadge').innerHTML = badgeText;
   
-  // Clear search box
-  document.getElementById('searchValue').value = '';
-  
-  // Show loading
   document.getElementById('resultsArea').innerHTML = `
     <div class="results-card">
       <div class="spinner-wrap">
@@ -975,9 +878,8 @@ async function applyHierarchyFilter() {
   
   try {
     const res = await gasGet({ 
-      action: 'searchStaffWithHierarchy',
-      searchType: 'personalNo',
-      searchValue: '',
+      action: 'getStaffByHierarchy',
+      district: district,
       wing: wing,
       tehsil: tehsil,
       markaz: markaz
@@ -995,73 +897,7 @@ async function applyHierarchyFilter() {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  SEARCH WITHIN HIERARCHY
-// ══════════════════════════════════════════════════════════════
-async function performHierarchySearch() {
-  const searchType = document.getElementById('searchType').value;
-  const searchValue = document.getElementById('searchValue').value.trim();
-  
-  if (!searchValue) {
-    // If no search term, just show all staff in current hierarchy
-    applyHierarchyFilter();
-    return;
-  }
-  
-  const btn = document.getElementById('searchBtn');
-  const btnText = document.getElementById('searchBtnText');
-  btnText.textContent = 'Searching…';
-  btn.disabled = true;
-  
-  document.getElementById('resultsArea').innerHTML = `
-    <div class="results-card">
-      <div class="spinner-wrap">
-        <div class="spinner-ring"></div>
-        <span class="spinner-text">Searching within hierarchy...</span>
-      </div>
-    </div>`;
-  
-  try {
-    const res = await gasGet({ 
-      action: 'searchStaffWithHierarchy',
-      searchType: searchType,
-      searchValue: searchValue,
-      wing: currentHierarchy.wing,
-      tehsil: currentHierarchy.tehsil,
-      markaz: currentHierarchy.markaz
-    });
-    
-    btnText.textContent = '🔎 Search';
-    btn.disabled = false;
-    
-    if (!res.success) {
-      toast(res.message || 'An error occurred.', 'error');
-      clearResults();
-      return;
-    }
-    
-    if (!res.data || res.data.length === 0) {
-      toast('No staff found matching your search within the selected hierarchy.', 'info');
-      clearResults();
-      return;
-    }
-    
-    renderTable(res.headers, res.data);
-    toast(`Found ${res.data.length} matching teacher(s)`, 'success');
-    
-  } catch (e) {
-    btnText.textContent = '🔎 Search';
-    btn.disabled = false;
-    toast('Network error: ' + e.message, 'error');
-    clearResults();
-  }
-}
-
-function clearResults() {
-  document.getElementById('resultsArea').innerHTML = '';
-}
-
-// ══════════════════════════════════════════════════════════════
-//  TABLE
+//  TABLE RENDER
 // ══════════════════════════════════════════════════════════════
 let dtInstance;
 function renderTable(headers, rows) {
@@ -1070,37 +906,30 @@ function renderTable(headers, rows) {
     $('#resultsTable').remove();
   }
 
-  // Build header – Action column last
   let thHtml = '<tr>';
   headers.forEach(h => thHtml += `<th>${esc(String(h))}</th>`);
   thHtml += '<th>Action</th></tr>';
 
-  // Build body
   let tbHtml = '';
   rows.forEach(row => {
-    const pNo  = escAttr(String(row[0]));
+    const pNo = escAttr(String(row[0]));
     const name = escAttr(String(row[3] || ''));
-    // row[6] = Gender column G (0-based index 6 in Staff sheet)
     const gender = escAttr(String(row[6] || ''));
-    // row[1] = EMIS column B
     const emis = escAttr(String(row[1] || ''));
 
     tbHtml += '<tr>';
     row.forEach(cell => tbHtml += `<td>${esc(cell == null ? '' : String(cell))}</td>`);
-    tbHtml += `<td><button class="btn-action-row"
-        onclick="openModal('${pNo}','${name}','${gender}','${emis}')">Action</button></td>`;
-    tbHtml += '</tr>';
+    tbHtml += `<td><button class="btn-action-row" onclick="openModal('${pNo}','${name}','${gender}','${emis}')">Action</button></td>`;
+    tbHtml += '<tr>';
   });
 
   document.getElementById('resultsArea').innerHTML = `
     <div class="results-card">
       <div class="results-header">
         <span class="results-pill">${rows.length} record${rows.length !== 1 ? 's' : ''}</span>
-        <span class="results-hint">Click <strong>Action</strong> to transfer, retire, or resign a teacher</span>
       </div>
       <div style="overflow-x:auto;">
-        <table id="resultsTable" class="table table-striped table-hover align-middle"
-               style="width:100%;white-space:nowrap;">
+        <table id="resultsTable" class="table table-striped table-hover align-middle" style="width:100%;white-space:nowrap;">
           <thead>${thHtml}</thead>
           <tbody>${tbHtml}</tbody>
         </table>
@@ -1111,11 +940,9 @@ function renderTable(headers, rows) {
     scrollX: true,
     destroy: true,
     dom: 'Bfrtip',
-    buttons: [
-      { extend: 'excelHtml5', className: 'btn buttons-excel', text: '⬇ Export Excel' }
-    ],
+    buttons: [{ extend: 'excelHtml5', className: 'btn buttons-excel', text: '⬇ Export Excel' }],
     columnDefs: [{ orderable: false, targets: -1 }],
-    language: { search: 'Filter:', lengthMenu: 'Show _MENU_ entries' },
+    language: { search: '🔎 Quick Filter:', lengthMenu: 'Show _MENU_ entries' },
   });
 }
 
@@ -1123,46 +950,42 @@ function renderTable(headers, rows) {
 //  ACTION MODAL
 // ══════════════════════════════════════════════════════════════
 function openModal(pNo, name, gender, emis) {
-  activePno    = pNo;
-  activeType   = '';
+  activePno = pNo;
+  activeType = '';
   schoolVerified = false;
 
-  // Look up current school info from cache
   const school = schoolsMap[emis] || {};
+  const teacherGenderRaw = decodeAttr(gender).toLowerCase();
+  // Convert 'M'/'F' to full words for comparison
+  const teacherGender = teacherGenderRaw === 'm' ? 'male' : (teacherGenderRaw === 'f' ? 'female' : teacherGenderRaw);
+  
   activeTeacher = {
-    name:            decodeAttr(name),
-    gender:          decodeAttr(gender).toLowerCase(),   // 'male' or 'female'
-    currentEmis:     emis,
-    currentTehsil:   school.tehsil   || '',
+    name: decodeAttr(name),
+    gender: teacherGender,
+    currentEmis: emis,
+    currentTehsil: school.tehsil || '',
     currentDistrict: school.district || '',
   };
 
-  // Populate strip
-  document.getElementById('modalName').textContent = activeTeacher.name + (gender ? ` (${gender})` : '');
+  document.getElementById('modalName').textContent = activeTeacher.name + (gender ? ` (${gender === 'M' ? 'Male' : 'Female'})` : '');
   document.getElementById('modalMeta').textContent =
     `Personal No: ${pNo}  •  Current EMIS: ${emis}` +
     (school.tehsil ? `  •  Tehsil: ${school.tehsil}` : '') +
     (school.district ? `  •  District: ${school.district}` : '');
 
-  // Reset pills
-  document.querySelectorAll('.action-pill').forEach(p => {
-    p.className = 'action-pill';
-  });
-
-  // Reset sections
+  document.querySelectorAll('.action-pill').forEach(p => p.className = 'action-pill');
   resetModalSections();
-
   new bootstrap.Modal(document.getElementById('actionModal')).show();
 }
 
 function resetModalSections() {
   document.getElementById('emisSection').classList.add('d-none');
   document.getElementById('notifSection').classList.add('d-none');
-  document.getElementById('newEmisInput').value   = '';
-  document.getElementById('notifInput').value     = '';
-  document.getElementById('verifiedMarkaz').value  = '';
+  document.getElementById('newEmisInput').value = '';
+  document.getElementById('notifInput').value = '';
+  document.getElementById('verifiedMarkaz').value = '';
   document.getElementById('verifiedSchoolName').value = '';
-  document.getElementById('verifiedTehsil').value  = '';
+  document.getElementById('verifiedTehsil').value = '';
   document.getElementById('verifiedDistrict').value = '';
   hideSchoolResult();
   schoolVerified = false;
@@ -1175,30 +998,17 @@ function selectPill(el) {
   schoolVerified = false;
   document.getElementById('confirmBtn').disabled = true;
 
-  // Style pills
-  document.querySelectorAll('.action-pill').forEach(p => {
-    p.className = 'action-pill';
-  });
+  document.querySelectorAll('.action-pill').forEach(p => p.className = 'action-pill');
   el.className = `action-pill active-${type}`;
 
-  // Show/hide sections
-  const isTransfer = ['same','oot','ood'].includes(type);
-  const isAction   = ['retirement','resignation'].includes(type);
+  const isTransfer = ['same', 'oot', 'ood'].includes(type);
+  const isAction = ['retirement', 'resignation'].includes(type);
 
   document.getElementById('emisSection').classList.toggle('d-none', !isTransfer);
   document.getElementById('notifSection').classList.toggle('d-none', !isAction);
-
-  // Reset inputs
-  document.getElementById('newEmisInput').value    = '';
-  document.getElementById('notifInput').value      = '';
-  document.getElementById('verifiedMarkaz').value  = '';
-  document.getElementById('verifiedSchoolName').value = '';
-  document.getElementById('verifiedTehsil').value  = '';
-  document.getElementById('verifiedDistrict').value = '';
   hideSchoolResult();
 }
 
-// ── EMIS verification (client-side using cache) ───────────────
 function onEmisInput() {
   schoolVerified = false;
   document.getElementById('confirmBtn').disabled = true;
@@ -1207,18 +1017,14 @@ function onEmisInput() {
 
 function verifySchool() {
   if (!activeType) { toast('Please select an action type first.', 'warn'); return; }
-
   const emis = document.getElementById('newEmisInput').value.trim();
   if (!emis) { toast('Please enter an EMIS code.', 'warn'); return; }
-
-  // Check cache
   if (!schoolsCached || Object.keys(schoolsMap).length === 0) {
     toast('Schools data not loaded yet. Please wait.', 'warn');
     return;
   }
 
   const school = schoolsMap[emis];
-
   if (!school) {
     showSchoolResult('err', '✗ EMIS not found', 'This EMIS code does not exist in the Schools database.');
     schoolVerified = false;
@@ -1226,100 +1032,79 @@ function verifySchool() {
     return;
   }
 
-  // ── Validation rules ──────────────────────────────────────
-  const teacherGender = activeTeacher.gender;   // 'male' or 'female'
-  const schoolGender  = school.gender.toLowerCase(); // 'male', 'female', 'mixed', etc.
-
-  // Gender check: male teacher cannot go to female school
+  // FIXED GENDER VALIDATION
+  const teacherGender = activeTeacher.gender; // 'male' or 'female'
+  const schoolGenderRaw = school.gender.toLowerCase();
+  let schoolGender = schoolGenderRaw;
+  
+  // Map school type to gender
+  if (schoolGenderRaw === 'male' || schoolGenderRaw === 'boys') schoolGender = 'male';
+  else if (schoolGenderRaw === 'female' || schoolGenderRaw === 'girls') schoolGender = 'female';
+  else if (schoolGenderRaw === 'mixed') schoolGender = 'mixed';
+  
+  // Gender validation logic
+  let genderValid = true;
+  let genderErrorMsg = '';
+  
   if (teacherGender === 'male' && schoolGender === 'female') {
+    genderValid = false;
+    genderErrorMsg = 'Male teacher cannot be transferred to a Female school.';
+  } else if (teacherGender === 'female' && schoolGender === 'male') {
+    genderValid = false;
+    genderErrorMsg = 'Female teacher cannot be transferred to a Male school.';
+  }
+  
+  if (!genderValid) {
     showSchoolResult('err',
       `✗ Gender Mismatch — ${school.name}`,
-      `This is a <strong>Female</strong> school. A Male teacher cannot be transferred here.`
+      `${genderErrorMsg}<br>School Type: <strong>${school.gender}</strong> | Teacher Gender: <strong>${teacherGender}</strong>`
     );
     schoolVerified = false;
     document.getElementById('confirmBtn').disabled = true;
     return;
   }
 
-  const currentTehsil   = activeTeacher.currentTehsil.toLowerCase().trim();
+  const currentTehsil = activeTeacher.currentTehsil.toLowerCase().trim();
   const currentDistrict = activeTeacher.currentDistrict.toLowerCase().trim();
-  const newTehsil       = school.tehsil.toLowerCase().trim();
-  const newDistrict     = school.district.toLowerCase().trim();
+  const newTehsil = school.tehsil.toLowerCase().trim();
+  const newDistrict = school.district.toLowerCase().trim();
 
-  if (activeType === 'same') {
-    // Must be same tehsil
-    if (currentTehsil && newTehsil && currentTehsil !== newTehsil) {
-      showSchoolResult('err',
-        `✗ Wrong Tehsil — ${school.name}`,
-        `<strong>Within Tehsil</strong> transfer requires a school in the same tehsil.<br>
-         Teacher's tehsil: <strong>${activeTeacher.currentTehsil}</strong><br>
-         Selected school's tehsil: <strong>${school.tehsil}</strong>`
-      );
-      schoolVerified = false;
-      document.getElementById('confirmBtn').disabled = true;
-      return;
-    }
+  if (activeType === 'same' && currentTehsil && newTehsil && currentTehsil !== newTehsil) {
+    showSchoolResult('err', `✗ Wrong Tehsil — ${school.name}`, `Within Tehsil transfer requires same tehsil.<br>Teacher's tehsil: ${activeTeacher.currentTehsil}<br>School's tehsil: ${school.tehsil}`);
+    schoolVerified = false;
+    document.getElementById('confirmBtn').disabled = true;
+    return;
   }
 
   if (activeType === 'oot') {
-    // Must be same district but different tehsil
     if (currentDistrict && newDistrict && currentDistrict !== newDistrict) {
-      showSchoolResult('err',
-        `✗ Wrong District — ${school.name}`,
-        `<strong>Out of Tehsil</strong> transfer must stay within the same district.<br>
-         Teacher's district: <strong>${activeTeacher.currentDistrict}</strong><br>
-         Selected school's district: <strong>${school.district}</strong>`
-      );
+      showSchoolResult('err', `✗ Wrong District — ${school.name}`, `Out of Tehsil transfer must stay within same district.<br>Teacher's district: ${activeTeacher.currentDistrict}<br>School's district: ${school.district}`);
       schoolVerified = false;
       document.getElementById('confirmBtn').disabled = true;
       return;
     }
     if (currentTehsil && newTehsil && currentTehsil === newTehsil) {
-      showSchoolResult('warn',
-        `⚠ Same Tehsil — ${school.name}`,
-        `<strong>Out of Tehsil</strong> transfer requires a school in a <em>different</em> tehsil.<br>
-         Both are in: <strong>${activeTeacher.currentTehsil}</strong>. Use "Within Tehsil" instead.`
-      );
+      showSchoolResult('warn', `⚠ Same Tehsil — ${school.name}`, `Out of Tehsil transfer requires a different tehsil. Use "Within Tehsil" instead.`);
       schoolVerified = false;
       document.getElementById('confirmBtn').disabled = true;
       return;
     }
   }
 
-  if (activeType === 'ood') {
-    // Must be different district
-    if (currentDistrict && newDistrict && currentDistrict === newDistrict) {
-      showSchoolResult('warn',
-        `⚠ Same District — ${school.name}`,
-        `<strong>Out of District</strong> transfer requires a school in a <em>different</em> district.<br>
-         Both are in: <strong>${activeTeacher.currentDistrict}</strong>. Use "Out of Tehsil" instead.`
-      );
-      schoolVerified = false;
-      document.getElementById('confirmBtn').disabled = true;
-      return;
-    }
+  if (activeType === 'ood' && currentDistrict && newDistrict && currentDistrict === newDistrict) {
+    showSchoolResult('warn', `⚠ Same District — ${school.name}`, `Out of District transfer requires a different district. Use "Out of Tehsil" instead.`);
+    schoolVerified = false;
+    document.getElementById('confirmBtn').disabled = true;
+    return;
   }
 
-  // ── All checks passed ────────────────────────────────────
-  document.getElementById('verifiedMarkaz').value      = school.markaz;
-  document.getElementById('verifiedSchoolName').value  = school.name;
-  document.getElementById('verifiedTehsil').value      = school.tehsil;
-  document.getElementById('verifiedDistrict').value    = school.district;
+  document.getElementById('verifiedMarkaz').value = school.markaz;
+  document.getElementById('verifiedSchoolName').value = school.name;
+  document.getElementById('verifiedTehsil').value = school.tehsil;
+  document.getElementById('verifiedDistrict').value = school.district;
 
-  let badge = '';
-  if (activeType === 'same') badge = `<span style="background:var(--accent-lt);color:var(--accent);border-radius:5px;padding:1px 7px;font-size:11px;font-weight:700;">Within Tehsil ✓</span>`;
-  if (activeType === 'oot')  badge = `<span style="background:var(--teal-lt);color:var(--teal);border-radius:5px;padding:1px 7px;font-size:11px;font-weight:700;">Out of Tehsil ✓</span>`;
-  if (activeType === 'ood')  badge = `<span style="background:#f5f3ff;color:#7c3aed;border-radius:5px;padding:1px 7px;font-size:11px;font-weight:700;">Out of District ✓</span>`;
-
-  showSchoolResult('ok',
-    `✓ ${school.name}`,
-    `Tehsil: <strong>${school.tehsil}</strong> &nbsp;|&nbsp;
-     District: <strong>${school.district}</strong> &nbsp;|&nbsp;
-     Markaz: <strong>${school.markaz}</strong> &nbsp;|&nbsp;
-     Type: <strong>${school.gender}</strong><br>
-     Area: <strong>${school.area}</strong> &nbsp; ${badge}`
-  );
-
+  let badge = activeType === 'same' ? 'Within Tehsil ✓' : (activeType === 'oot' ? 'Out of Tehsil ✓' : 'Out of District ✓');
+  showSchoolResult('ok', `✓ ${school.name}`, `Tehsil: <strong>${school.tehsil}</strong> | District: <strong>${school.district}</strong> | Markaz: <strong>${school.markaz}</strong> | Type: <strong>${school.gender}</strong><br>${badge}`);
   schoolVerified = true;
   document.getElementById('confirmBtn').disabled = false;
 }
@@ -1328,7 +1113,7 @@ function showSchoolResult(type, title, detail) {
   const el = document.getElementById('schoolResult');
   el.className = `school-result ${type}`;
   el.style.display = 'block';
-  document.getElementById('srName').innerHTML   = title;
+  document.getElementById('srName').innerHTML = title;
   document.getElementById('srDetail').innerHTML = detail;
 }
 function hideSchoolResult() {
@@ -1336,13 +1121,10 @@ function hideSchoolResult() {
   if (el) el.style.display = 'none';
 }
 
-// ── Notification input ────────────────────────────────────────
 function onNotifInput() {
-  const val = document.getElementById('notifInput').value.trim();
-  document.getElementById('confirmBtn').disabled = !val;
+  document.getElementById('confirmBtn').disabled = !document.getElementById('notifInput').value.trim();
 }
 
-// ── Submit ────────────────────────────────────────────────────
 async function submitAction() {
   if (!activeType) { toast('Please select an action.', 'warn'); return; }
 
@@ -1351,24 +1133,24 @@ async function submitAction() {
   btn.disabled = true;
 
   let payload;
-  const isTransfer = ['same','oot','ood'].includes(activeType);
+  const isTransfer = ['same', 'oot', 'ood'].includes(activeType);
 
   if (isTransfer) {
     payload = {
-      action:        'transfer',
-      personalNo:    activePno,
-      transferType:  activeType,
-      newEmis:       document.getElementById('newEmisInput').value.trim(),
-      newMarkaz:     document.getElementById('verifiedMarkaz').value,
+      action: 'transfer',
+      personalNo: activePno,
+      transferType: activeType,
+      newEmis: document.getElementById('newEmisInput').value.trim(),
+      newMarkaz: document.getElementById('verifiedMarkaz').value,
       newSchoolName: document.getElementById('verifiedSchoolName').value,
-      newTehsil:     document.getElementById('verifiedTehsil').value,
-      newDistrict:   document.getElementById('verifiedDistrict').value,
+      newTehsil: document.getElementById('verifiedTehsil').value,
+      newDistrict: document.getElementById('verifiedDistrict').value,
     };
   } else {
     payload = {
-      action:         'retireOrResign',
-      personalNo:     activePno,
-      actionType:     activeType,
+      action: 'retireOrResign',
+      personalNo: activePno,
+      actionType: activeType,
       notificationNo: document.getElementById('notifInput').value.trim(),
     };
   }
@@ -1376,13 +1158,10 @@ async function submitAction() {
   try {
     const res = await gasPost(payload);
     btn.textContent = 'Confirm Action';
-
     const modalEl = document.getElementById('actionModal');
     bootstrap.Modal.getInstance(modalEl)?.hide();
-
     if (res && res.success) {
       toast(res.message, 'success');
-      // Refresh current hierarchy view
       applyHierarchyFilter();
     } else {
       toast(res?.message || 'Something went wrong.', 'error');
@@ -1395,9 +1174,6 @@ async function submitAction() {
   }
 }
 
-// ══════════════════════════════════════════════════════════════
-//  UTILITIES
-// ══════════════════════════════════════════════════════════════
 function toast(msg, type = 'info') {
   const container = document.getElementById('toasts');
   if (!container) return;
@@ -1409,14 +1185,14 @@ function toast(msg, type = 'info') {
 }
 
 function esc(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 function escAttr(str) {
-  return String(str).replace(/'/g,'&#39;').replace(/"/g,'&quot;');
+  return String(str).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
 }
 function decodeAttr(str) {
   const d = document.createElement('div');
-  d.innerHTML = String(str).replace(/&#39;/g,"'");
+  d.innerHTML = String(str).replace(/&#39;/g, "'");
   return d.textContent;
 }
 </script>
