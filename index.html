@@ -522,34 +522,71 @@
 <!-- ══ MAIN ══════════════════════════════════════════════════ -->
 <div class="main">
 
-  <!-- Search Card -->
+  <!-- Hierarchy Filter Card -->
   <div class="search-card">
-    <div class="section-label">Search Staff</div>
+    <div class="section-label">📍 Hierarchy Filter</div>
     <div class="row g-3 align-items-end">
+      
+      <div class="col-12 col-md-3">
+        <label class="form-label">Wing</label>
+        <select id="wingSelect" class="form-select" onchange="onWingChange()">
+          <option value="all">All Wings</option>
+        </select>
+      </div>
+      
+      <div class="col-12 col-md-3">
+        <label class="form-label">Tehsil</label>
+        <select id="tehsilSelect" class="form-select" onchange="onTehsilChange()" disabled>
+          <option value="all">All Tehsils</option>
+        </select>
+      </div>
+      
+      <div class="col-12 col-md-3">
+        <label class="form-label">Markaz</label>
+        <select id="markazSelect" class="form-select" onchange="onMarkazChange()" disabled>
+          <option value="all">All Markaz</option>
+        </select>
+      </div>
+      
+      <div class="col-12 col-md-3">
+        <button class="btn-search" onclick="applyHierarchyFilter()" style="background: var(--teal);">
+          <span>📊 Apply Filter</span>
+        </button>
+      </div>
+      
+    </div>
+  </div>
 
+  <!-- Staff Search Card (within hierarchy scope) -->
+  <div class="search-card">
+    <div class="section-label">🔍 Staff Search (within selected hierarchy)</div>
+    <div class="row g-3 align-items-end">
+      
       <div class="col-12 col-sm-6 col-md-3">
         <label class="form-label">Search By</label>
-        <select id="searchType" class="form-select" onchange="toggleSearchInput()">
+        <select id="searchType" class="form-select">
           <option value="personalNo">Personal No.</option>
           <option value="cnic">CNIC</option>
           <option value="emis">School EMIS Code</option>
-          <option value="markaz">Markaz Name</option>
         </select>
       </div>
-
+      
       <div class="col-12 col-sm-6 col-md-7">
-        <label class="form-label">Value</label>
-        <input  type="text"   id="searchValue"  class="form-control" placeholder="e.g. 3054123"
-                onkeydown="if(event.key==='Enter') performSearch()" />
-        <select id="searchMarkaz" class="form-select d-none"></select>
+        <label class="form-label">Value (exact match)</label>
+        <input type="text" id="searchValue" class="form-control" 
+               placeholder="e.g. 3054123 or 32301-1234567-1"
+               onkeydown="if(event.key==='Enter') performHierarchySearch()" />
       </div>
-
+      
       <div class="col-12 col-md-2">
-        <button class="btn-search" id="searchBtn" onclick="performSearch()">
-          <span id="searchBtnText">Search</span>
+        <button class="btn-search" id="searchBtn" onclick="performHierarchySearch()">
+          <span id="searchBtnText">🔎 Search</span>
         </button>
       </div>
-
+      
+    </div>
+    <div class="mt-2 small text-muted">
+      ℹ️ Showing staff from: <span id="hierarchyScopeBadge">All Wings</span>
     </div>
   </div>
 
@@ -684,12 +721,19 @@ let activeTeacher = {};   // { name, gender, currentEmis, currentTehsil, current
 let activeType    = '';   // same | oot | ood | retirement | resignation
 let schoolVerified = false;
 
+// ── Hierarchy state ──────────────────────────────────────────
+let currentHierarchy = {
+  wing: 'all',
+  tehsil: 'all',
+  markaz: 'all'
+};
+
 // ══════════════════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   initSchoolsCache();
-  loadMarkazList();
+  loadHierarchyOptions();
 });
 
 // ══════════════════════════════════════════════════════════════
@@ -787,84 +831,225 @@ function refreshSchoolCache() {
 }
 
 function showOverlay(msg, pct) {
-  document.getElementById('cacheOverlay').classList.remove('hidden');
-  document.getElementById('cacheProgressText').textContent = msg;
-  document.getElementById('cacheProgressBar').style.width  = pct + '%';
+  const overlay = document.getElementById('cacheOverlay');
+  if (overlay) {
+    overlay.classList.remove('hidden');
+    document.getElementById('cacheProgressText').textContent = msg;
+    document.getElementById('cacheProgressBar').style.width  = pct + '%';
+  }
 }
 function hideOverlay() {
-  document.getElementById('cacheOverlay').classList.add('hidden');
+  const overlay = document.getElementById('cacheOverlay');
+  if (overlay) overlay.classList.add('hidden');
 }
 function setCacheBadge(state, text) {
   const el = document.getElementById('cacheBadge');
-  el.className = 'cache-badge ' + state;
-  el.textContent = text;
-}
-
-// ══════════════════════════════════════════════════════════════
-//  MARKAZ LIST
-// ══════════════════════════════════════════════════════════════
-async function loadMarkazList() {
-  try {
-    const res = await gasGet({ action: 'getMarkazList' });
-    if (!res.success) return;
-    const sel = document.getElementById('searchMarkaz');
-    sel.innerHTML = '';
-    res.data.forEach(m => {
-      const opt = document.createElement('option');
-      opt.value = opt.textContent = m;
-      sel.appendChild(opt);
-    });
-  } catch (e) { /* silent */ }
-}
-
-// ══════════════════════════════════════════════════════════════
-//  SEARCH
-// ══════════════════════════════════════════════════════════════
-function toggleSearchInput() {
-  const type = document.getElementById('searchType').value;
-  const hints = { personalNo: 'e.g. 3054123', cnic: 'e.g. 32301-1234567-1', emis: 'e.g. 32110001' };
-  if (type === 'markaz') {
-    document.getElementById('searchValue').classList.add('d-none');
-    document.getElementById('searchMarkaz').classList.remove('d-none');
-  } else {
-    document.getElementById('searchValue').classList.remove('d-none');
-    document.getElementById('searchMarkaz').classList.add('d-none');
-    document.getElementById('searchValue').placeholder = hints[type] || '';
+  if (el) {
+    el.className = 'cache-badge ' + state;
+    el.textContent = text;
   }
 }
 
-async function performSearch() {
-  const type  = document.getElementById('searchType').value;
-  const value = type === 'markaz'
-    ? document.getElementById('searchMarkaz').value
-    : document.getElementById('searchValue').value.trim();
+// ══════════════════════════════════════════════════════════════
+//  HIERARCHY OPTIONS
+// ══════════════════════════════════════════════════════════════
+async function loadHierarchyOptions() {
+  try {
+    const wingsRes = await gasGet({ action: 'getWingsList' });
+    if (wingsRes.success) {
+      const wingSelect = document.getElementById('wingSelect');
+      wingSelect.innerHTML = '<option value="all">All Wings</option>';
+      wingsRes.data.forEach(wing => {
+        const opt = document.createElement('option');
+        opt.value = opt.textContent = wing;
+        wingSelect.appendChild(opt);
+      });
+    }
+  } catch (e) {
+    console.error('Failed to load hierarchy:', e);
+  }
+}
 
-  if (!value) { toast('Please enter a search value.', 'warn'); return; }
+async function onWingChange() {
+  const wing = document.getElementById('wingSelect').value;
+  currentHierarchy.wing = wing;
+  currentHierarchy.tehsil = 'all';
+  currentHierarchy.markaz = 'all';
+  
+  const tehsilSelect = document.getElementById('tehsilSelect');
+  const markazSelect = document.getElementById('markazSelect');
+  
+  if (wing === 'all') {
+    tehsilSelect.innerHTML = '<option value="all">All Tehsils</option>';
+    markazSelect.innerHTML = '<option value="all">All Markaz</option>';
+    tehsilSelect.disabled = true;
+    markazSelect.disabled = true;
+    return;
+  }
+  
+  // Load Tehsils for this Wing
+  tehsilSelect.disabled = false;
+  tehsilSelect.innerHTML = '<option value="all">All Tehsils</option>';
+  markazSelect.innerHTML = '<option value="all">All Markaz</option>';
+  markazSelect.disabled = true;
+  
+  try {
+    const tehsilsRes = await gasGet({ action: 'getTehsilsByWing', wing: wing });
+    if (tehsilsRes.success) {
+      tehsilsRes.data.forEach(tehsil => {
+        const opt = document.createElement('option');
+        opt.value = opt.textContent = tehsil;
+        tehsilSelect.appendChild(opt);
+      });
+    }
+  } catch (e) {
+    console.error('Failed to load tehsils:', e);
+  }
+}
 
-  const btn     = document.getElementById('searchBtn');
-  const btnText = document.getElementById('searchBtnText');
-  btnText.textContent = 'Searching…';
-  btn.disabled = true;
+async function onTehsilChange() {
+  const wing = document.getElementById('wingSelect').value;
+  const tehsil = document.getElementById('tehsilSelect').value;
+  currentHierarchy.tehsil = tehsil;
+  currentHierarchy.markaz = 'all';
+  
+  const markazSelect = document.getElementById('markazSelect');
+  
+  if (tehsil === 'all') {
+    markazSelect.innerHTML = '<option value="all">All Markaz</option>';
+    markazSelect.disabled = true;
+    return;
+  }
+  
+  // Load Markaz for this Wing + Tehsil
+  markazSelect.disabled = false;
+  markazSelect.innerHTML = '<option value="all">All Markaz</option>';
+  
+  try {
+    const markazRes = await gasGet({ action: 'getMarkazByWingAndTehsil', wing: wing, tehsil: tehsil });
+    if (markazRes.success) {
+      markazRes.data.forEach(markaz => {
+        const opt = document.createElement('option');
+        opt.value = opt.textContent = markaz;
+        markazSelect.appendChild(opt);
+      });
+    }
+  } catch (e) {
+    console.error('Failed to load markaz:', e);
+  }
+}
 
+function onMarkazChange() {
+  currentHierarchy.markaz = document.getElementById('markazSelect').value;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  APPLY HIERARCHY FILTER (show all staff in scope)
+// ══════════════════════════════════════════════════════════════
+async function applyHierarchyFilter() {
+  const wing = document.getElementById('wingSelect').value;
+  const tehsil = document.getElementById('tehsilSelect').value;
+  const markaz = document.getElementById('markazSelect').value;
+  
+  currentHierarchy = { wing, tehsil, markaz };
+  
+  // Update badge
+  let badgeText = '';
+  if (wing !== 'all') badgeText += `Wing: ${wing}`;
+  if (tehsil !== 'all') badgeText += ` → Tehsil: ${tehsil}`;
+  if (markaz !== 'all') badgeText += ` → Markaz: ${markaz}`;
+  if (!badgeText) badgeText = 'All Wings';
+  document.getElementById('hierarchyScopeBadge').innerHTML = badgeText;
+  
+  // Clear search box
+  document.getElementById('searchValue').value = '';
+  
+  // Show loading
   document.getElementById('resultsArea').innerHTML = `
     <div class="results-card">
       <div class="spinner-wrap">
         <div class="spinner-ring"></div>
-        <span class="spinner-text">Fetching staff data…</span>
+        <span class="spinner-text">Loading staff in selected hierarchy...</span>
       </div>
     </div>`;
-
+  
   try {
-    const res = await gasGet({ action: 'searchStaff', searchType: type, searchValue: value });
-    btnText.textContent = 'Search';
-    btn.disabled = false;
-
-    if (!res.success) { toast(res.message || 'An error occurred.', 'error'); clearResults(); return; }
-    if (!res.data || res.data.length === 0) { toast('No staff found matching your query.', 'info'); clearResults(); return; }
-
-    renderTable(res.headers, res.data);
+    const res = await gasGet({ 
+      action: 'searchStaffWithHierarchy',
+      searchType: 'personalNo',
+      searchValue: '',
+      wing: wing,
+      tehsil: tehsil,
+      markaz: markaz
+    });
+    
+    if (res.success) {
+      renderTable(res.headers, res.data);
+      toast(`Found ${res.data.length} teachers in selected hierarchy`, 'info');
+    } else {
+      toast(res.message || 'Error loading staff', 'error');
+    }
   } catch (e) {
-    btnText.textContent = 'Search';
+    toast('Network error: ' + e.message, 'error');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SEARCH WITHIN HIERARCHY
+// ══════════════════════════════════════════════════════════════
+async function performHierarchySearch() {
+  const searchType = document.getElementById('searchType').value;
+  const searchValue = document.getElementById('searchValue').value.trim();
+  
+  if (!searchValue) {
+    // If no search term, just show all staff in current hierarchy
+    applyHierarchyFilter();
+    return;
+  }
+  
+  const btn = document.getElementById('searchBtn');
+  const btnText = document.getElementById('searchBtnText');
+  btnText.textContent = 'Searching…';
+  btn.disabled = true;
+  
+  document.getElementById('resultsArea').innerHTML = `
+    <div class="results-card">
+      <div class="spinner-wrap">
+        <div class="spinner-ring"></div>
+        <span class="spinner-text">Searching within hierarchy...</span>
+      </div>
+    </div>`;
+  
+  try {
+    const res = await gasGet({ 
+      action: 'searchStaffWithHierarchy',
+      searchType: searchType,
+      searchValue: searchValue,
+      wing: currentHierarchy.wing,
+      tehsil: currentHierarchy.tehsil,
+      markaz: currentHierarchy.markaz
+    });
+    
+    btnText.textContent = '🔎 Search';
+    btn.disabled = false;
+    
+    if (!res.success) {
+      toast(res.message || 'An error occurred.', 'error');
+      clearResults();
+      return;
+    }
+    
+    if (!res.data || res.data.length === 0) {
+      toast('No staff found matching your search within the selected hierarchy.', 'info');
+      clearResults();
+      return;
+    }
+    
+    renderTable(res.headers, res.data);
+    toast(`Found ${res.data.length} matching teacher(s)`, 'success');
+    
+  } catch (e) {
+    btnText.textContent = '🔎 Search';
     btn.disabled = false;
     toast('Network error: ' + e.message, 'error');
     clearResults();
@@ -1046,7 +1231,7 @@ function verifySchool() {
   const schoolGender  = school.gender.toLowerCase(); // 'male', 'female', 'mixed', etc.
 
   // Gender check: male teacher cannot go to female school
-  if (teacherGender === 'm' && schoolGender === 'female') {
+  if (teacherGender === 'male' && schoolGender === 'female') {
     showSchoolResult('err',
       `✗ Gender Mismatch — ${school.name}`,
       `This is a <strong>Female</strong> school. A Male teacher cannot be transferred here.`
@@ -1055,9 +1240,6 @@ function verifySchool() {
     document.getElementById('confirmBtn').disabled = true;
     return;
   }
-
-  // Female teacher → male school (optional block — uncomment if needed)
-  // if (teacherGender === 'female' && schoolGender === 'male') { ... }
 
   const currentTehsil   = activeTeacher.currentTehsil.toLowerCase().trim();
   const currentDistrict = activeTeacher.currentDistrict.toLowerCase().trim();
@@ -1150,7 +1332,8 @@ function showSchoolResult(type, title, detail) {
   document.getElementById('srDetail').innerHTML = detail;
 }
 function hideSchoolResult() {
-  document.getElementById('schoolResult').style.display = 'none';
+  const el = document.getElementById('schoolResult');
+  if (el) el.style.display = 'none';
 }
 
 // ── Notification input ────────────────────────────────────────
@@ -1199,7 +1382,8 @@ async function submitAction() {
 
     if (res && res.success) {
       toast(res.message, 'success');
-      performSearch();   // auto-refresh table
+      // Refresh current hierarchy view
+      applyHierarchyFilter();
     } else {
       toast(res?.message || 'Something went wrong.', 'error');
       btn.disabled = false;
@@ -1215,10 +1399,12 @@ async function submitAction() {
 //  UTILITIES
 // ══════════════════════════════════════════════════════════════
 function toast(msg, type = 'info') {
+  const container = document.getElementById('toasts');
+  if (!container) return;
   const el = document.createElement('div');
   el.className = `toast-item ${type}`;
   el.textContent = msg;
-  document.getElementById('toasts').appendChild(el);
+  container.appendChild(el);
   setTimeout(() => el.remove(), 4200);
 }
 
