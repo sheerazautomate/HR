@@ -11,26 +11,18 @@
   <meta name="twitter:title" content="Staff Statement Dashboard">
   <meta name="twitter:description" content="View and Export Staff Data, Use Transfer Out, Retire or Resign features for staff management.">
   <meta name="twitter:image" content="https://sheerazautomate.github.io/HR/preview-image.png">
-  <meta name="description" content="Comprehensive staff monitoring dashboard for Punjab schools with real-time analytics and insights.">
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Staff Statement Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet"/>
   <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     :root {
-      /* Light mode */
       --bg-primary: #f8fafc;
       --bg-secondary: #ffffff;
       --bg-card: #ffffff;
@@ -53,7 +45,6 @@
       --purple-light: #ede9fe;
       --teal: #14b8a6;
       --teal-light: #ccfbf1;
-      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
       --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
       --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
       --radius: 1rem;
@@ -74,24 +65,16 @@
       font-family: 'Inter', sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: background 0.3s ease;
     }
 
-    /* Glassmorphism Effects */
     .glass-card {
       background: var(--bg-card);
-      backdrop-filter: blur(10px);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s;
     }
 
-    .glass-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    /* Modern Topbar */
     .topbar {
       background: var(--bg-card);
       border-bottom: 1px solid var(--border);
@@ -103,7 +86,6 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      backdrop-filter: blur(10px);
     }
 
     .logo {
@@ -129,7 +111,6 @@
       font-size: 1.25rem;
       font-weight: 700;
       margin: 0;
-      line-height: 1.2;
     }
 
     .logo-text p {
@@ -138,7 +119,6 @@
       margin: 0;
     }
 
-    /* Theme Toggle */
     .theme-toggle {
       width: 40px;
       height: 40px;
@@ -149,15 +129,8 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.3s;
     }
 
-    .theme-toggle:hover {
-      background: var(--accent-light);
-      border-color: var(--accent);
-    }
-
-    /* Quick Action Buttons */
     .quick-buttons {
       display: flex;
       gap: 0.75rem;
@@ -172,21 +145,16 @@
       font-weight: 600;
       border: none;
       cursor: pointer;
-      transition: all 0.2s;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .quick-btn i { font-size: 0.9rem; }
-
     .quick-btn-oot { background: var(--teal-light); color: var(--teal); }
     .quick-btn-ood { background: var(--purple-light); color: var(--purple); }
     .quick-btn-retirement { background: var(--warning-light); color: var(--warning); }
     .quick-btn-resignation { background: var(--danger-light); color: var(--danger); }
-    .quick-btn:hover { transform: translateY(-1px); filter: brightness(0.95); }
 
-    /* Hierarchy Selects */
     .hierarchy-select {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
@@ -194,21 +162,14 @@
       padding: 0.6rem 0.8rem;
       font-size: 0.85rem;
       color: var(--text-primary);
-      transition: all 0.2s;
+      width: 100%;
     }
 
     .hierarchy-select:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
     }
 
-    .hierarchy-select:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    /* Modern Button */
     .btn-modern {
       background: linear-gradient(135deg, var(--accent), var(--accent-dark));
       color: white;
@@ -218,48 +179,17 @@
       font-weight: 600;
       font-size: 0.85rem;
       cursor: pointer;
-      transition: all 0.3s;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .btn-modern:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-lg);
+    .btn-modern-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
     }
 
-    /* Table Styles */
-    .dataTables_wrapper {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      padding: 1rem;
-    }
-
-    table.dataTable {
-      border-collapse: separate;
-      border-spacing: 0;
-    }
-
-    table.dataTable thead th {
-      background: var(--bg-secondary) !important;
-      color: var(--text-primary) !important;
-      font-weight: 600;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border-bottom: 1px solid var(--border) !important;
-    }
-
-    table.dataTable tbody tr {
-      transition: background 0.2s;
-    }
-
-    table.dataTable tbody tr:hover {
-      background: var(--accent-light) !important;
-    }
-
-    /* Action Button */
     .action-btn {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
@@ -268,23 +198,19 @@
       font-size: 0.75rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
     }
 
     .action-btn:hover {
       background: var(--accent);
       color: white;
-      border-color: var(--accent);
     }
 
-    /* Modal Styles */
     .modal-content {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 1.5rem;
     }
 
-    /* Toast */
     .toast-container {
       position: fixed;
       bottom: 1.5rem;
@@ -309,20 +235,6 @@
       to { transform: translateX(0); opacity: 1; }
     }
 
-    /* Loading Skeleton */
-    .skeleton {
-      background: linear-gradient(90deg, var(--border) 25%, var(--bg-secondary) 50%, var(--border) 75%);
-      background-size: 200% 100%;
-      animation: loading 1.5s infinite;
-      border-radius: 8px;
-    }
-
-    @keyframes loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    /* Badge */
     .badge-custom {
       display: inline-flex;
       align-items: center;
@@ -332,11 +244,27 @@
       font-weight: 600;
     }
 
-    /* Responsive */
+    .action-pill {
+      text-align: center;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-pill:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .action-pill.active {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
     @media (max-width: 768px) {
       .topbar { padding: 0 1rem; height: 60px; }
-      .logo-text h1 { font-size: 1rem; }
-      .quick-buttons { gap: 0.5rem; }
       .quick-btn { padding: 0.4rem 0.8rem; font-size: 0.7rem; }
     }
   </style>
@@ -344,10 +272,10 @@
 <body>
 
 <div id="cacheOverlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center;">
-  <div class="glass-card" style="padding: 2rem; text-align: center; max-width: 350px;">
+  <div class="glass-card" style="padding: 2rem; text-align: center; max-width: 400px;">
     <div style="font-size: 3rem; margin-bottom: 1rem;">🏫</div>
-    <h3 style="margin-bottom: 0.5rem;">Loading Schools Data</h3>
-    <p style="color: var(--text-muted); font-size: 0.85rem;">First time setup, please wait...</p>
+    <h3 id="overlayTitle">Loading Schools Data</h3>
+    <p id="overlayMsg" style="color: var(--text-muted); font-size: 0.85rem;">First time setup, please wait...</p>
     <div style="height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 1rem;">
       <div id="cacheProgressBar" style="width: 0%; height: 100%; background: var(--accent); transition: width 0.3s;"></div>
     </div>
@@ -364,11 +292,10 @@
     </div>
   </div>
   <div style="display: flex; align-items: center; gap: 1rem;">
-    <div class="cache-badge" id="cacheBadge" style="font-size: 0.7rem; padding: 0.3rem 0.8rem; background: var(--bg-secondary); border-radius: 20px;">⟳ Loading...</div>
     <div class="theme-toggle" onclick="toggleTheme()">
       <i id="themeIcon" class="fas fa-moon"></i>
     </div>
-    <button class="btn-modern" onclick="refreshAllData()" style="background: var(--bg-secondary); color: var(--text-primary);">
+    <button class="btn-modern btn-modern-outline" onclick="refreshAllData()">
       <i class="fas fa-sync-alt"></i> Refresh
     </button>
   </div>
@@ -376,7 +303,6 @@
 
 <main style="padding: 1.5rem; max-width: 1600px; margin: 0 auto;">
   
-  <!-- Quick Action Buttons -->
   <div class="quick-buttons">
     <button class="quick-btn quick-btn-oot" onclick="showArchiveModal('OOT')">
       <i class="fas fa-exchange-alt"></i> OOT Archive
@@ -392,34 +318,33 @@
     </button>
   </div>
 
-  <!-- Hierarchy Filter Card -->
   <div class="glass-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
       <i class="fas fa-layer-group" style="color: var(--accent);"></i>
-      <span style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Location Hierarchy</span>
+      <span style="font-weight: 600; font-size: 0.85rem;">Location Hierarchy</span>
     </div>
     <div class="row g-3">
       <div class="col-md-3">
         <label class="form-label" style="font-size: 0.7rem; font-weight: 600;">District</label>
-        <select id="districtSelect" class="hierarchy-select" style="width: 100%;" onchange="onDistrictChange()">
+        <select id="districtSelect" class="hierarchy-select" onchange="onDistrictChange()">
           <option value="all">All Districts</option>
         </select>
       </div>
       <div class="col-md-3">
         <label class="form-label" style="font-size: 0.7rem; font-weight: 600;">Wing</label>
-        <select id="wingSelect" class="hierarchy-select" style="width: 100%;" onchange="onWingChange()" disabled>
+        <select id="wingSelect" class="hierarchy-select" onchange="onWingChange()" disabled>
           <option value="all">All Wings</option>
         </select>
       </div>
       <div class="col-md-3">
         <label class="form-label" style="font-size: 0.7rem; font-weight: 600;">Tehsil</label>
-        <select id="tehsilSelect" class="hierarchy-select" style="width: 100%;" onchange="onTehsilChange()" disabled>
+        <select id="tehsilSelect" class="hierarchy-select" onchange="onTehsilChange()" disabled>
           <option value="all">All Tehsils</option>
         </select>
       </div>
       <div class="col-md-3">
         <label class="form-label" style="font-size: 0.7rem; font-weight: 600;">Markaz</label>
-        <select id="markazSelect" class="hierarchy-select" style="width: 100%;" onchange="onMarkazChange()" disabled>
+        <select id="markazSelect" class="hierarchy-select" onchange="onMarkazChange()" disabled>
           <option value="all">All Markaz</option>
         </select>
       </div>
@@ -432,11 +357,10 @@
     </div>
   </div>
 
-  <!-- Results Area -->
   <div id="resultsArea">
     <div class="glass-card" style="padding: 3rem; text-align: center;">
       <i class="fas fa-filter" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
-      <p style="color: var(--text-muted);">Select a district/tehsil/markaz and click "Show Staff"</p>
+      <p style="color: var(--text-muted);">Select a district/wing/tehsil/markaz and click "Show Staff"</p>
     </div>
   </div>
 
@@ -448,41 +372,31 @@
 <div class="modal fade" id="actionModal" tabindex="-1" data-bs-backdrop="static">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
-      <div class="modal-header" style="border-bottom: 1px solid var(--border);">
+      <div class="modal-header">
         <h5 class="modal-title"><i class="fas fa-user-cog"></i> Teacher Action</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="teacher-strip" style="background: var(--accent-light); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">
-          <div style="display: flex; align-items: center; gap: 1rem;">
-            <div style="width: 50px; height: 50px; background: var(--accent); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;">
-              <i class="fas fa-user fa-2x"></i>
-            </div>
-            <div>
-              <div id="modalName" style="font-weight: 700;">—</div>
-              <div id="modalMeta" style="font-size: 0.8rem; color: var(--text-muted);">—</div>
-            </div>
-          </div>
-        </div>
+        <div id="teacherStrip" style="background: var(--accent-light); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;"></div>
 
-        <div class="pill-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.5rem; margin-bottom: 1.5rem;">
-          <div class="action-pill" data-type="same" onclick="selectPill(this)" style="text-align: center; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.5rem; margin-bottom: 1.5rem;">
+          <div class="action-pill" data-type="same" onclick="selectPill(this)">
             <i class="fas fa-school"></i>
             <div style="font-size: 0.7rem; font-weight: 600;">Within Tehsil</div>
           </div>
-          <div class="action-pill" data-type="oot" onclick="selectPill(this)" style="text-align: center; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">
+          <div class="action-pill" data-type="oot" onclick="selectPill(this)">
             <i class="fas fa-truck"></i>
             <div style="font-size: 0.7rem; font-weight: 600;">Out of Tehsil</div>
           </div>
-          <div class="action-pill" data-type="ood" onclick="selectPill(this)" style="text-align: center; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">
+          <div class="action-pill" data-type="ood" onclick="selectPill(this)">
             <i class="fas fa-plane"></i>
             <div style="font-size: 0.7rem; font-weight: 600;">Out of District</div>
           </div>
-          <div class="action-pill" data-type="retirement" onclick="selectPill(this)" style="text-align: center; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">
+          <div class="action-pill" data-type="retirement" onclick="selectPill(this)">
             <i class="fas fa-medal"></i>
             <div style="font-size: 0.7rem; font-weight: 600;">Retirement</div>
           </div>
-          <div class="action-pill" data-type="resignation" onclick="selectPill(this)" style="text-align: center; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">
+          <div class="action-pill" data-type="resignation" onclick="selectPill(this)">
             <i class="fas fa-file-signature"></i>
             <div style="font-size: 0.7rem; font-weight: 600;">Resignation</div>
           </div>
@@ -495,6 +409,7 @@
             <button class="btn btn-outline-primary" onclick="verifySchool()">Verify</button>
           </div>
           <div id="schoolResult" class="mt-2" style="display: none;"></div>
+          <input type="hidden" id="verifiedData">
         </div>
 
         <div id="notifSection" style="display: none;">
@@ -511,7 +426,7 @@
 </div>
 
 <!-- Archive Modal -->
-<div class="modal fade" id="archiveModal" tabindex="-1" data-bs-backdrop="static">
+<div class="modal fade" id="archiveModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
@@ -519,21 +434,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body" id="archiveModalBody">
-        <div class="text-center p-5">Loading...</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Activity Log Modal -->
-<div class="modal fade" id="activityModal" tabindex="-1" data-bs-backdrop="static">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title"><i class="fas fa-history"></i> Activity Log</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body" id="activityModalBody">
         <div class="text-center p-5">Loading...</div>
       </div>
     </div>
@@ -550,79 +450,97 @@
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 
 <script>
+// ══════════════════════════════════════════════════════════════
+//  CONFIGURATION
+// ══════════════════════════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbwqxPxKOyQL_MUx9BA70SOcdObhuCXBqU9hKdrMRBh_JJgJUKgE_Pz_2yJtWSrnQZFQ/exec';
-const CACHE_KEYS = { schools: 'staffDash_schools_v4', staff: 'staffDash_staff_v4' };
+const CACHE_KEYS = { schools: 'staffDash_schools_v6', staff: 'staffDash_staff_v6' };
 
 let schoolsMap = {};
 let staffDataCache = { headers: [], rows: [] };
 let currentHierarchy = { district: 'all', wing: 'all', tehsil: 'all', markaz: 'all' };
 let activeTeacher = null;
 let activeType = null;
+let verifiedSchoolData = null;
 let currentDataTable = null;
 
-// Theme Toggle
-function toggleTheme() {
-  document.body.classList.toggle('dark');
-  localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-  const icon = document.getElementById('themeIcon');
-  icon.classList.toggle('fa-moon');
-  icon.classList.toggle('fa-sun');
-}
-
-// Initialize
+// ══════════════════════════════════════════════════════════════
+//  INITIALIZATION
+// ══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme === 'dark') document.body.classList.add('dark');
-  await loadSchoolsCache();
-  await loadHierarchyFromCache();
-  await loadStaffCache();
-  hideOverlay();
-  showToast('Dashboard ready!', 'success');
+  await initializeApp();
 });
 
-// Schools Cache
-async function loadSchoolsCache() {
+async function initializeApp() {
   try {
+    updateOverlay('Loading Schools Data...', 'First time setup...', 10);
+    
     const cached = localStorage.getItem(CACHE_KEYS.schools);
     if (cached) {
       const data = JSON.parse(cached);
-      buildSchoolsMap(data.data);
-      updateCacheBadge(`✓ ${data.data.length.toLocaleString()} schools`);
-      return;
+      if (data.data && data.data.length > 0) {
+        buildSchoolsMap(data.data);
+        updateCacheBadge(`✓ ${data.data.length.toLocaleString()} schools`);
+      } else {
+        await fetchSchoolsFromServer();
+      }
+    } else {
+      await fetchSchoolsFromServer();
     }
-    await fetchSchoolsFromServer();
-  } catch (e) {
-    await fetchSchoolsFromServer();
+    
+    updateOverlay('Loading Staff Data...', 'Please wait...', 60);
+    const staffCached = localStorage.getItem(CACHE_KEYS.staff);
+    if (staffCached) {
+      const data = JSON.parse(staffCached);
+      if (data.data) {
+        staffDataCache = { headers: data.headers, rows: data.data };
+      } else {
+        await refreshStaffCache();
+      }
+    } else {
+      await refreshStaffCache();
+    }
+    
+    updateOverlay('Building Hierarchy...', 'Almost ready...', 90);
+    buildHierarchyFromCache();
+    
+    updateOverlay('Ready!', 'Dashboard ready', 100);
+    setTimeout(() => {
+      document.getElementById('cacheOverlay').style.display = 'none';
+      showToast('Dashboard ready!', 'success');
+    }, 500);
+    
+  } catch (error) {
+    console.error('Init error:', error);
+    updateOverlay('Error', error.message, 0);
+    showToast('Failed to load data. Please refresh.', 'error');
   }
 }
 
 async function fetchSchoolsFromServer() {
-  updateCacheProgress('Downloading schools...', 30);
+  updateOverlay('Downloading Schools...', 'Fetching from server...', 30);
   const res = await gasGet({ action: 'getAllSchools' });
-  if (res.success) {
+  if (res.success && res.data) {
     buildSchoolsMap(res.data);
     localStorage.setItem(CACHE_KEYS.schools, JSON.stringify({ data: res.data, ts: Date.now() }));
     updateCacheBadge(`✓ ${res.data.length.toLocaleString()} schools`);
+  } else {
+    throw new Error(res.message || 'Failed to load schools');
   }
-  updateCacheProgress('Complete!', 100);
 }
 
 function buildSchoolsMap(schools) {
   schoolsMap = {};
   schools.forEach(s => {
-    schoolsMap[s[0]] = { name: s[1], markaz: s[2], tehsil: s[3], district: s[4], gender: s[5], area: s[6], wing: s[7] };
+    if (s && s[0]) {
+      schoolsMap[s[0].toString().trim()] = { 
+        name: s[1] || '', markaz: s[2] || '', tehsil: s[3] || '', 
+        district: s[4] || '', gender: s[5] || '', area: s[6] || '', wing: s[7] || '' 
+      };
+    }
   });
-}
-
-// Staff Cache
-async function loadStaffCache() {
-  const cached = localStorage.getItem(CACHE_KEYS.staff);
-  if (cached) {
-    const data = JSON.parse(cached);
-    staffDataCache = { headers: data.headers, rows: data.data };
-    return;
-  }
-  await refreshStaffCache();
 }
 
 async function refreshStaffCache() {
@@ -633,8 +551,7 @@ async function refreshStaffCache() {
   }
 }
 
-// Load Hierarchy from cached schools data (FAST!)
-function loadHierarchyFromCache() {
+function buildHierarchyFromCache() {
   const districts = new Set();
   const wingsByDistrict = {};
   const tehsilsByWing = {};
@@ -669,6 +586,9 @@ function loadHierarchyFromCache() {
   window.hierarchyCache = { wingsByDistrict, tehsilsByWing, markazByTehsil };
 }
 
+// ══════════════════════════════════════════════════════════════
+//  HIERARCHY FUNCTIONS
+// ══════════════════════════════════════════════════════════════
 function onDistrictChange() {
   const district = document.getElementById('districtSelect').value;
   currentHierarchy.district = district;
@@ -767,7 +687,6 @@ function onMarkazChange() {
   currentHierarchy.markaz = document.getElementById('markazSelect').value;
 }
 
-// Apply Filter
 function applyHierarchyFilter() {
   const district = document.getElementById('districtSelect').value;
   const wing = document.getElementById('wingSelect').value;
@@ -788,26 +707,31 @@ function applyHierarchyFilter() {
 
 function filterStaffByHierarchy() {
   const filtered = staffDataCache.rows.filter(row => {
-    const emis = row[1];
+    const emis = row[1] ? row[1].toString().trim() : '';
     const school = schoolsMap[emis];
     if (!school) return false;
     
-    let match = true;
-    if (currentHierarchy.district !== 'all' && school.district !== currentHierarchy.district) match = false;
-    if (currentHierarchy.wing !== 'all' && school.wing !== currentHierarchy.wing) match = false;
-    if (currentHierarchy.tehsil !== 'all' && school.tehsil !== currentHierarchy.tehsil) match = false;
-    if (currentHierarchy.markaz !== 'all' && school.markaz !== currentHierarchy.markaz) match = false;
-    return match;
+    if (currentHierarchy.district !== 'all' && school.district !== currentHierarchy.district) return false;
+    if (currentHierarchy.wing !== 'all' && school.wing !== currentHierarchy.wing) return false;
+    if (currentHierarchy.tehsil !== 'all' && school.tehsil !== currentHierarchy.tehsil) return false;
+    if (currentHierarchy.markaz !== 'all' && school.markaz !== currentHierarchy.markaz) return false;
+    return true;
   });
   
   renderTable(staffDataCache.headers, filtered);
   showToast(`Found ${filtered.length} teachers`, 'info');
 }
 
-// Render Table
+// ══════════════════════════════════════════════════════════════
+//  TABLE RENDER
+// ══════════════════════════════════════════════════════════════
 function renderTable(headers, rows) {
-  if (currentDataTable) currentDataTable.destroy();
-  if ($('#resultsTable').length) $('#resultsTable').remove();
+  if (currentDataTable) {
+    currentDataTable.destroy();
+  }
+  if ($('#resultsTable').length) {
+    $('#resultsTable').remove();
+  }
   
   let html = `<div class="glass-card" style="padding: 1rem;">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -825,7 +749,7 @@ function renderTable(headers, rows) {
   rows.forEach(row => {
     html += '<tr>';
     row.forEach(cell => html += `<td>${escapeHtml(cell == null ? '' : String(cell))}</td>`);
-    html += `<td><button class="action-btn" onclick="openActionModal('${escapeAttr(row[0])}', '${escapeAttr(row[3])}', '${escapeAttr(row[6])}', '${escapeAttr(row[1])}')"><i class="fas fa-bolt"></i> Action</button></td>`;
+    html += `<td><button class="action-btn" onclick='openActionModal("${escapeAttr(row[0])}", "${escapeAttr(row[3])}", "${escapeAttr(row[6])}", "${escapeAttr(row[1])}")'><i class="fas fa-bolt"></i> Action</button></td>`;
     html += '</tr>';
   });
   
@@ -840,7 +764,250 @@ function renderTable(headers, rows) {
   });
 }
 
-// Archive Modal
+// ══════════════════════════════════════════════════════════════
+//  ACTION MODAL FUNCTIONS
+// ══════════════════════════════════════════════════════════════
+function openActionModal(pno, name, gender, emis) {
+  // Reset state
+  activeType = null;
+  verifiedSchoolData = null;
+  
+  const school = schoolsMap[emis] || {};
+  activeTeacher = { 
+    pno: pno, 
+    name: name, 
+    gender: gender, 
+    emis: emis,
+    currentTehsil: school.tehsil || '',
+    currentDistrict: school.district || ''
+  };
+  
+  // Update teacher strip
+  document.getElementById('teacherStrip').innerHTML = `
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <div style="width: 50px; height: 50px; background: var(--accent); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;">
+        <i class="fas fa-user fa-2x"></i>
+      </div>
+      <div>
+        <div style="font-weight: 700;">${escapeHtml(name)} (${gender === 'M' ? 'Male' : 'Female'})</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Personal No: ${pno} | EMIS: ${emis}</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted);">Tehsil: ${school.tehsil || 'N/A'} | District: ${school.district || 'N/A'}</div>
+      </div>
+    </div>
+  `;
+  
+  // Reset UI
+  document.querySelectorAll('.action-pill').forEach(p => p.classList.remove('active'));
+  document.getElementById('emisSection').style.display = 'none';
+  document.getElementById('notifSection').style.display = 'none';
+  document.getElementById('newEmisInput').value = '';
+  document.getElementById('notifInput').value = '';
+  document.getElementById('schoolResult').style.display = 'none';
+  document.getElementById('confirmBtn').disabled = true;
+  document.getElementById('confirmBtn').innerHTML = 'Confirm Action';
+  document.getElementById('confirmBtn').disabled = false;
+  
+  const modal = new bootstrap.Modal(document.getElementById('actionModal'));
+  modal.show();
+}
+
+function selectPill(el) {
+  activeType = el.dataset.type;
+  verifiedSchoolData = null;
+  
+  // Update active pill styling
+  document.querySelectorAll('.action-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  
+  const isTransfer = ['same', 'oot', 'ood'].includes(activeType);
+  const isAction = ['retirement', 'resignation'].includes(activeType);
+  
+  document.getElementById('emisSection').style.display = isTransfer ? 'block' : 'none';
+  document.getElementById('notifSection').style.display = isAction ? 'block' : 'none';
+  document.getElementById('schoolResult').style.display = 'none';
+  document.getElementById('confirmBtn').disabled = isTransfer ? true : false;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SCHOOL VERIFICATION WITH VALIDATION
+// ══════════════════════════════════════════════════════════════
+async function verifySchool() {
+  const emis = document.getElementById('newEmisInput').value.trim();
+  if (!emis) {
+    showSchoolResult('error', 'Please enter an EMIS code');
+    return;
+  }
+  
+  const school = schoolsMap[emis];
+  if (!school) {
+    showSchoolResult('error', 'EMIS not found in schools database');
+    return;
+  }
+  
+  // GENDER VALIDATION
+  const teacherGender = activeTeacher.gender === 'M' ? 'male' : 'female';
+  const schoolGender = school.gender.toLowerCase();
+  
+  if (teacherGender === 'male' && schoolGender === 'female') {
+    showSchoolResult('error', `❌ Gender Mismatch: Male teacher cannot be transferred to a Female school (${school.name})`);
+    return;
+  }
+  
+  if (teacherGender === 'female' && schoolGender === 'male') {
+    showSchoolResult('error', `❌ Gender Mismatch: Female teacher cannot be transferred to a Male school (${school.name})`);
+    return;
+  }
+  
+  // TRANSFER TYPE VALIDATION
+  const currentTehsil = activeTeacher.currentTehsil.toLowerCase().trim();
+  const currentDistrict = activeTeacher.currentDistrict.toLowerCase().trim();
+  const newTehsil = school.tehsil.toLowerCase().trim();
+  const newDistrict = school.district.toLowerCase().trim();
+  
+  if (activeType === 'same') {
+    // Must be SAME tehsil
+    if (currentTehsil !== newTehsil) {
+      showSchoolResult('error', `❌ Within Tehsil transfer requires same tehsil.<br>Current: ${activeTeacher.currentTehsil}<br>New: ${school.tehsil}`);
+      return;
+    }
+  }
+  
+  if (activeType === 'oot') {
+    // Must be SAME district, DIFFERENT tehsil
+    if (currentDistrict !== newDistrict) {
+      showSchoolResult('error', `❌ Out of Tehsil transfer must stay in same district.<br>Current District: ${activeTeacher.currentDistrict}<br>New District: ${school.district}`);
+      return;
+    }
+    if (currentTehsil === newTehsil) {
+      showSchoolResult('error', `❌ Out of Tehsil transfer requires a DIFFERENT tehsil.<br>Both are in: ${school.tehsil}<br>Use "Within Tehsil" instead.`);
+      return;
+    }
+  }
+  
+  if (activeType === 'ood') {
+    // Must be DIFFERENT district
+    if (currentDistrict === newDistrict) {
+      showSchoolResult('error', `❌ Out of District transfer requires a DIFFERENT district.<br>Current District: ${activeTeacher.currentDistrict}<br>New District: ${school.district}<br>Use "Out of Tehsil" instead.`);
+      return;
+    }
+  }
+  
+  // ALL VALIDATIONS PASSED
+  verifiedSchoolData = {
+    emis: emis,
+    name: school.name,
+    markaz: school.markaz,
+    tehsil: school.tehsil,
+    district: school.district
+  };
+  
+  let typeBadge = '';
+  if (activeType === 'same') typeBadge = '<span class="badge" style="background: var(--accent);">Within Tehsil ✓</span>';
+  if (activeType === 'oot') typeBadge = '<span class="badge" style="background: var(--teal);">Out of Tehsil ✓</span>';
+  if (activeType === 'ood') typeBadge = '<span class="badge" style="background: var(--purple);">Out of District ✓</span>';
+  
+  showSchoolResult('success', `✅ ${school.name}`, `
+    <strong>Tehsil:</strong> ${school.tehsil}<br>
+    <strong>District:</strong> ${school.district}<br>
+    <strong>Markaz:</strong> ${school.markaz}<br>
+    <strong>Type:</strong> ${school.gender}<br>
+    ${typeBadge}
+  `);
+  
+  document.getElementById('confirmBtn').disabled = false;
+}
+
+function showSchoolResult(type, title, detail = '') {
+  const resultDiv = document.getElementById('schoolResult');
+  const bgColor = type === 'success' ? 'var(--success-light)' : (type === 'error' ? 'var(--danger-light)' : 'var(--warning-light)');
+  const textColor = type === 'success' ? 'var(--success)' : (type === 'error' ? 'var(--danger)' : 'var(--warning)');
+  resultDiv.innerHTML = `<div style="background: ${bgColor}; color: ${textColor}; padding: 0.75rem; border-radius: 8px;">${title}${detail ? `<div style="font-size: 0.8rem; margin-top: 0.25rem;">${detail}</div>` : ''}</div>`;
+  resultDiv.style.display = 'block';
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SUBMIT ACTION
+// ══════════════════════════════════════════════════════════════
+async function submitAction() {
+  if (!activeType) {
+    showToast('Please select an action type', 'warning');
+    return;
+  }
+  
+  const confirmBtn = document.getElementById('confirmBtn');
+  const originalText = confirmBtn.innerHTML;
+  confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+  confirmBtn.disabled = true;
+  
+  try {
+    let payload;
+    const isTransfer = ['same', 'oot', 'ood'].includes(activeType);
+    
+    if (isTransfer) {
+      if (!verifiedSchoolData) {
+        showToast('Please verify the school first', 'warning');
+        confirmBtn.innerHTML = originalText;
+        confirmBtn.disabled = false;
+        return;
+      }
+      
+      payload = {
+        action: 'transfer',
+        personalNo: activeTeacher.pno,
+        transferType: activeType,
+        newEmis: verifiedSchoolData.emis,
+        newMarkaz: verifiedSchoolData.markaz,
+        newSchoolName: verifiedSchoolData.name,
+        newTehsil: verifiedSchoolData.tehsil,
+        newDistrict: verifiedSchoolData.district
+      };
+    } else {
+      const notifNo = document.getElementById('notifInput').value.trim();
+      if (!notifNo) {
+        showToast('Please enter notification number', 'warning');
+        confirmBtn.innerHTML = originalText;
+        confirmBtn.disabled = false;
+        return;
+      }
+      
+      payload = {
+        action: 'retireOrResign',
+        personalNo: activeTeacher.pno,
+        actionType: activeType,
+        notificationNo: notifNo
+      };
+    }
+    
+    const res = await gasPost(payload);
+    
+    if (res.success) {
+      showToast(res.message, 'success');
+      const modal = bootstrap.Modal.getInstance(document.getElementById('actionModal'));
+      modal.hide();
+      
+      // Refresh data
+      await refreshStaffCache();
+      applyHierarchyFilter();
+      
+      // Reset button for next time
+      confirmBtn.innerHTML = originalText;
+      confirmBtn.disabled = false;
+    } else {
+      showToast(res.message || 'Action failed', 'error');
+      confirmBtn.innerHTML = originalText;
+      confirmBtn.disabled = false;
+    }
+  } catch (error) {
+    console.error('Submit error:', error);
+    showToast('Network error: ' + error.message, 'error');
+    confirmBtn.innerHTML = originalText;
+    confirmBtn.disabled = false;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  ARCHIVE MODAL
+// ══════════════════════════════════════════════════════════════
 async function showArchiveModal(type) {
   document.getElementById('archiveModalTitle').innerHTML = `<i class="fas fa-archive"></i> ${type} Archive`;
   document.getElementById('archiveModalBody').innerHTML = '<div class="text-center p-5"><div class="spinner-border"></div><p class="mt-2">Loading...</p></div>';
@@ -848,11 +1015,22 @@ async function showArchiveModal(type) {
   const modal = new bootstrap.Modal(document.getElementById('archiveModal'));
   modal.show();
   
-  const res = await gasGet({ action: 'getArchiveData', archiveType: type, district: currentHierarchy.district, wing: currentHierarchy.wing, tehsil: currentHierarchy.tehsil, markaz: currentHierarchy.markaz });
+  const res = await gasGet({ 
+    action: 'getArchiveData', 
+    archiveType: type, 
+    district: currentHierarchy.district, 
+    wing: currentHierarchy.wing, 
+    tehsil: currentHierarchy.tehsil, 
+    markaz: currentHierarchy.markaz 
+  });
   
-  if (res.success && res.data.length) {
+  if (res.success && res.data && res.data.length > 0) {
     let html = `<div style="overflow-x: auto;"><table class="table table-hover" id="archiveTable"><thead><tr>`;
-    res.headers.forEach(h => html += `<th>${escapeHtml(String(h))}</th>`);
+    if (res.headers) {
+      res.headers.forEach(h => html += `<th>${escapeHtml(String(h))}</th>`);
+    } else {
+      html += '<th>Data</th>';
+    }
     html += `</tr></thead><tbody>`;
     res.data.forEach(row => {
       html += '<tr>';
@@ -863,111 +1041,13 @@ async function showArchiveModal(type) {
     document.getElementById('archiveModalBody').innerHTML = html;
     $('#archiveTable').DataTable({ scrollX: true, dom: 'Bfrtip', buttons: [{ extend: 'excelHtml5', text: 'Export Excel' }] });
   } else {
-    document.getElementById('archiveModalBody').innerHTML = '<div class="text-center p-5"><i class="fas fa-folder-open fa-3x mb-3"></i><p>No records found in selected hierarchy</p></div>';
+    document.getElementById('archiveModalBody').innerHTML = '<div class="text-center p-5"><i class="fas fa-folder-open fa-3x mb-3"></i><p>No records found</p></div>';
   }
 }
 
-// Open Action Modal
-function openActionModal(pno, name, gender, emis) {
-  activeTeacher = { pno, name, gender, emis, school: schoolsMap[emis] || {} };
-  activeType = null;
-  
-  document.getElementById('modalName').innerHTML = `${name} <span style="font-size:0.8rem;">(${gender === 'M' ? 'Male' : 'Female'})</span>`;
-  document.getElementById('modalMeta').innerHTML = `Personal No: ${pno} | EMIS: ${emis} | ${activeTeacher.school.tehsil || ''} | ${activeTeacher.school.district || ''}`;
-  
-  document.querySelectorAll('.action-pill').forEach(p => p.style.borderColor = 'var(--border)');
-  document.getElementById('emisSection').style.display = 'none';
-  document.getElementById('notifSection').style.display = 'none';
-  document.getElementById('confirmBtn').disabled = true;
-  
-  new bootstrap.Modal(document.getElementById('actionModal')).show();
-}
-
-function selectPill(el) {
-  activeType = el.dataset.type;
-  document.querySelectorAll('.action-pill').forEach(p => p.style.borderColor = 'var(--border)');
-  el.style.borderColor = 'var(--accent)';
-  
-  const isTransfer = ['same', 'oot', 'ood'].includes(activeType);
-  document.getElementById('emisSection').style.display = isTransfer ? 'block' : 'none';
-  document.getElementById('notifSection').style.display = (!isTransfer && activeType) ? 'block' : 'none';
-  document.getElementById('confirmBtn').disabled = !activeType;
-}
-
-// Verify School
-async function verifySchool() {
-  const emis = document.getElementById('newEmisInput').value.trim();
-  const school = schoolsMap[emis];
-  const resultDiv = document.getElementById('schoolResult');
-  
-  if (!school) {
-    resultDiv.innerHTML = '<div class="alert alert-danger">❌ EMIS not found</div>';
-    resultDiv.style.display = 'block';
-    return;
-  }
-  
-  // Gender validation
-  const teacherGender = activeTeacher.gender === 'M' ? 'male' : 'female';
-  const schoolGender = school.gender.toLowerCase();
-  
-  if (teacherGender === 'male' && schoolGender === 'female') {
-    resultDiv.innerHTML = '<div class="alert alert-danger">❌ Male teacher cannot be transferred to a Female school</div>';
-    resultDiv.style.display = 'block';
-    return;
-  }
-  
-  if (teacherGender === 'female' && schoolGender === 'male') {
-    resultDiv.innerHTML = '<div class="alert alert-danger">❌ Female teacher cannot be transferred to a Male school</div>';
-    resultDiv.style.display = 'block';
-    return;
-  }
-  
-  resultDiv.innerHTML = `<div class="alert alert-success">✅ ${school.name}<br><small>Tehsil: ${school.tehsil} | District: ${school.district}</small></div>`;
-  resultDiv.style.display = 'block';
-  document.getElementById('confirmBtn').disabled = false;
-}
-
-// Submit Action
-async function submitAction() {
-  const btn = document.getElementById('confirmBtn');
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-  btn.disabled = true;
-  
-  let payload;
-  if (['same', 'oot', 'ood'].includes(activeType)) {
-    payload = {
-      action: 'transfer',
-      personalNo: activeTeacher.pno,
-      transferType: activeType,
-      newEmis: document.getElementById('newEmisInput').value.trim(),
-      newMarkaz: schoolsMap[document.getElementById('newEmisInput').value.trim()]?.markaz || '',
-      newSchoolName: schoolsMap[document.getElementById('newEmisInput').value.trim()]?.name || '',
-      newTehsil: schoolsMap[document.getElementById('newEmisInput').value.trim()]?.tehsil || '',
-      newDistrict: schoolsMap[document.getElementById('newEmisInput').value.trim()]?.district || ''
-    };
-  } else {
-    payload = {
-      action: 'retireOrResign',
-      personalNo: activeTeacher.pno,
-      actionType: activeType,
-      notificationNo: document.getElementById('notifInput').value.trim()
-    };
-  }
-  
-  const res = await gasPost(payload);
-  if (res.success) {
-    showToast(res.message, 'success');
-    bootstrap.Modal.getInstance(document.getElementById('actionModal')).hide();
-    await refreshStaffCache();
-    applyHierarchyFilter();
-  } else {
-    showToast(res.message, 'error');
-    btn.innerHTML = 'Confirm Action';
-    btn.disabled = false;
-  }
-}
-
-// Helper Functions
+// ══════════════════════════════════════════════════════════════
+//  UTILITY FUNCTIONS
+// ══════════════════════════════════════════════════════════════
 async function gasGet(params) {
   const qs = new URLSearchParams(params).toString();
   const res = await fetch(`${GAS_URL}?${qs}`);
@@ -989,30 +1069,38 @@ function refreshAllData() {
   location.reload();
 }
 
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+  localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  const icon = document.getElementById('themeIcon');
+  icon.classList.toggle('fa-moon');
+  icon.classList.toggle('fa-sun');
+}
+
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
-  toast.className = `toast-custom`;
-  toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+  toast.className = 'toast-custom';
+  const icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'exclamation-circle' : (type === 'warning' ? 'exclamation-triangle' : 'info-circle'));
+  toast.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
+}
+
+function updateOverlay(title, msg, percent) {
+  const titleEl = document.getElementById('overlayTitle');
+  const msgEl = document.getElementById('overlayMsg');
+  const barEl = document.getElementById('cacheProgressBar');
+  const textEl = document.getElementById('cacheProgressText');
+  if (titleEl) titleEl.textContent = title;
+  if (msgEl) msgEl.textContent = msg;
+  if (barEl) barEl.style.width = `${percent}%`;
+  if (textEl) textEl.textContent = msg;
 }
 
 function updateCacheBadge(text) {
   const badge = document.getElementById('cacheBadge');
   if (badge) badge.innerHTML = `<i class="fas fa-database"></i> ${text}`;
-}
-
-function updateCacheProgress(msg, percent) {
-  const textEl = document.getElementById('cacheProgressText');
-  const barEl = document.getElementById('cacheProgressBar');
-  if (textEl) textEl.textContent = msg;
-  if (barEl) barEl.style.width = `${percent}%`;
-}
-
-function hideOverlay() {
-  const overlay = document.getElementById('cacheOverlay');
-  if (overlay) overlay.style.display = 'none';
 }
 
 function escapeHtml(str) {
